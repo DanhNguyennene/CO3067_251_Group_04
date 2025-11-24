@@ -163,7 +163,7 @@ void printBenchmarkHeader() {
     std::cout << "================================================" << std::endl;
 }
 
-void printResults(int n, int threads, int threshold, float time, bool show_gflops = true) {
+void printResults(int n, int threads, int threshold, float time, bool show_gflops = false) {
     std::cout << std::fixed << std::setprecision(4);
     std::cout << "Size: " << n << "x" << n 
               << " | Threads: " << threads 
@@ -224,7 +224,7 @@ int main(int argc, char ** argv){
     std::cout << "\n================================================" << std::endl;
     std::cout << "Results:" << std::endl;
     std::cout << "================================================" << std::endl;
-    printResults(N, num_threads, threshold, time, true);
+    printResults(N, num_threads, threshold, time, false);
 
     if (check == 0){
         std::cout << "================================================" << std::endl;

@@ -3,7 +3,7 @@
 
 # Compiler settings
 CXX = g++
-CXXFLAGS = -std=c++11 -O3 -fopenmp -Wall -Wextra
+CXXFLAGS = -std=c++11 -O3 -fopenmp -Wall -Wextra -march=native
 LDFLAGS = -fopenmp
 
 # Target executable
@@ -12,6 +12,11 @@ TARGET = main
 # Source files
 SOURCES = main.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
+
+# Test parameters (as per assignment requirements)
+SIZES = 100 1000 10000
+THREADS = 1 2 4 8 16
+THRESHOLDS = 32 64 128 100
 
 # Default target
 all: $(TARGET)
@@ -30,13 +35,242 @@ $(TARGET): $(OBJECTS)
 
 # Clean build files
 clean:
-	rm -f $(OBJECTS) $(TARGET)
+	rm -f $(OBJECTS) $(TARGET) *.txt *.csv
 	@echo "Clean complete"
 
-# Run with default parameters (1000x1000, verify, max threads, threshold=128)
-run: $(TARGET)
-	@echo "Running with default parameters (1000x1000)..."
-	./$(TARGET) 1000
+# ==========================================
+# ASSIGNMENT REQUIRED TESTS
+# ==========================================
+
+# Test Case 1: Matrix sizes (100, 1000, 10000) as per assignment
+test-assignment-sizes: $(TARGET)
+	@echo "=========================================="
+	@echo "TEST CASE: Assignment Matrix Sizes"
+	@echo "Testing: 100x100, 1000x1000, 10000x10000"
+	@echo "=========================================="
+	@echo ""
+	@echo "Size: 100x100 (with verification)"
+	@echo "------------------------------------------"
+	./$(TARGET) 100 1 8 128
+	@echo ""
+	@echo "Size: 1000x1000 (with verification)"
+	@echo "------------------------------------------"
+	./$(TARGET) 1000 1 8 128
+	@echo ""
+	@echo "Size: 10000x10000 (NO verification - too slow!)"
+	@echo "------------------------------------------"
+	./$(TARGET) 10000 0 8 128
+	@echo ""
+
+# Test Case 2: Scalability Study - varying thread counts (strong scaling)
+test-scalability-100: $(TARGET)
+	@echo "=========================================="
+	@echo "TEST CASE: Scalability Study - 100x100"
+	@echo "Strong Scaling (fixed problem size)"
+	@echo "=========================================="
+	@echo ""
+	@for threads in 1 2 4 8 16; do \
+		echo "Threads: $$threads"; \
+		./$(TARGET) 100 0 $$threads 64; \
+		echo ""; \
+	done
+
+test-scalability-1000: $(TARGET)
+	@echo "=========================================="
+	@echo "TEST CASE: Scalability Study - 1000x1000"
+	@echo "Strong Scaling (fixed problem size)"
+	@echo "=========================================="
+	@echo ""
+	@for threads in 1 2 4 8 16; do \
+		echo "Threads: $$threads"; \
+		./$(TARGET) 1000 0 $$threads 128; \
+		echo ""; \
+	done
+
+test-scalability-10000: $(TARGET)
+	@echo "=========================================="
+	@echo "TEST CASE: Scalability Study - 10000x10000"
+	@echo "Strong Scaling (fixed problem size)"
+	@echo "=========================================="
+	@echo ""
+	@for threads in 1 2 4 8 16; do \
+		echo "Threads: $$threads"; \
+		./$(TARGET) 10000 0 $$threads 128; \
+		echo ""; \
+	done
+
+test-scalability-all: test-scalability-100 test-scalability-1000 test-scalability-10000
+
+# Test Case 3: Threshold Optimization Study
+test-threshold-100: $(TARGET)
+	@echo "=========================================="
+	@echo "TEST CASE: Threshold Study - 100x100"
+	@echo "Finding optimal base case size"
+	@echo "=========================================="
+	@echo ""
+	@for thresh in 32 64 128 100; do \
+		echo "Threshold: $$thresh"; \
+		./$(TARGET) 100 0 8 $$thresh; \
+		echo ""; \
+	done
+
+test-threshold-1000: $(TARGET)
+	@echo "=========================================="
+	@echo "TEST CASE: Threshold Study - 1000x1000"
+	@echo "Finding optimal base case size"
+	@echo "=========================================="
+	@echo ""
+	@for thresh in 32 64 128 100 512; do \
+		echo "Threshold: $$thresh"; \
+		./$(TARGET) 1000 0 8 $$thresh; \
+		echo ""; \
+	done
+
+test-threshold-10000: $(TARGET)
+	@echo "=========================================="
+	@echo "TEST CASE: Threshold Study - 10000x10000"
+	@echo "Finding optimal base case size"
+	@echo "=========================================="
+	@echo ""
+	@for thresh in 64 128 100 512; do \
+		echo "Threshold: $$thresh"; \
+		./$(TARGET) 10000 0 8 $$thresh; \
+		echo ""; \
+	done
+
+test-threshold-all: test-threshold-100 test-threshold-1000 test-threshold-10000
+
+# Test Case 4: Correctness Verification for all sizes
+test-correctness: $(TARGET)
+	@echo "=========================================="
+	@echo "TEST CASE: Correctness Verification"
+	@echo "Verifying results against serial version"
+	@echo "=========================================="
+	@echo ""
+	@echo "Verifying 100x100..."
+	@echo "------------------------------------------"
+	./$(TARGET) 100 1 8 128
+	@echo ""
+	@echo "Verifying 500x500..."
+	@echo "------------------------------------------"
+	./$(TARGET) 500 1 8 128
+	@echo ""
+	@echo "Verifying 1000x1000..."
+	@echo "------------------------------------------"
+	./$(TARGET) 1000 1 8 128
+	@echo ""
+
+
+# Test Case 8: Comparing different thread configurations
+test-thread-configs: $(TARGET)
+	@echo "=========================================="
+	@echo "TEST CASE 8: Thread Configuration Study"
+	@echo "Testing various thread counts on 1000x1000"
+	@echo "=========================================="
+	@echo ""
+	@for threads in 1 2 3 4 6 8 10 12 16 20 24; do \
+		echo "Threads: $$threads"; \
+		./$(TARGET) 1000 0 $$threads 128; \
+		echo ""; \
+	done
+
+
+# ==========================================
+# COMPREHENSIVE TEST SUITES
+# ==========================================
+
+# Run ALL test cases (use this for complete report data!)
+test-all: $(TARGET)
+	@echo "=========================================="
+	@echo "RUNNING ALL TEST CASES"
+	@echo "This will take a while..."
+	@echo "=========================================="
+	@echo ""
+	@make test-assignment-sizes
+	@make test-scalability-all
+	@make test-threshold-all
+	@make test-correctness
+
+# Quick test suite (essential tests only)
+test-quick: $(TARGET)
+	@echo "=========================================="
+	@echo "QUICK TEST SUITE"
+	@echo "=========================================="
+	@make test-assignment-sizes
+	@make test-scalability-1000
+
+# Complete benchmark for report
+test-report: $(TARGET)
+	@echo "=========================================="
+	@echo "GENERATING COMPLETE REPORT DATA"
+	@echo "=========================================="
+	@echo ""
+	@echo "Starting comprehensive benchmark..."
+	@echo "Output will be saved to: benchmark_results.txt"
+	@echo ""
+	@make test-all > benchmark_results.txt 2>&1
+	@echo ""
+	@echo "=========================================="
+	@echo "BENCHMARK COMPLETE!"
+	@echo "Results saved to: benchmark_results.txt"
+	@echo "=========================================="
+
+# ==========================================
+# DATA EXPORT FOR ANALYSIS
+# ==========================================
+
+# Generate CSV data for plotting
+export-csv: $(TARGET)
+	@echo "Generating CSV data for analysis..."
+	@echo "size,threads,threshold,time,gflops" > scalability_data.csv
+	@echo "# Scalability data for 1000x1000"
+	@for threads in 1 2 4 8 16; do \
+		./$(TARGET) 1000 0 $$threads 128 | grep "Time:" | \
+		awk -v t=$$threads '{print "1000,"t",128,"$$4","$$6}' >> scalability_data.csv; \
+	done
+	@echo "Data saved to: scalability_data.csv"
+
+# ==========================================
+# PLATFORM-SPECIFIC TESTS
+# ==========================================
+
+# Test on current machine
+test-current-machine: $(TARGET)
+	@echo "=========================================="
+	@echo "TESTING ON CURRENT MACHINE"
+	@echo "=========================================="
+	@echo ""
+	@echo "System Information:"
+	@echo "------------------------------------------"
+	@make info
+	@echo ""
+	@echo "Running benchmarks..."
+	@echo "------------------------------------------"
+	@make test-assignment-sizes
+	@make test-scalability-1000
+
+# Multiple machine test (for assignment requirement)
+test-machine-1: test-current-machine
+	@echo "Machine 1 tests complete"
+	@echo "Results for Machine 1" > machine1_results.txt
+	@make test-assignment-sizes >> machine1_results.txt 2>&1
+	@make test-scalability-1000 >> machine1_results.txt 2>&1
+
+test-machine-2: test-current-machine
+	@echo "Machine 2 tests complete"
+	@echo "Results for Machine 2" > machine2_results.txt
+	@make test-assignment-sizes >> machine2_results.txt 2>&1
+	@make test-scalability-1000 >> machine2_results.txt 2>&1
+
+test-machine-3: test-current-machine
+	@echo "Machine 3 tests complete"
+	@echo "Results for Machine 3" > machine3_results.txt
+	@make test-assignment-sizes >> machine3_results.txt 2>&1
+	@make test-scalability-1000 >> machine3_results.txt 2>&1
+
+# ==========================================
+# UTILITY TARGETS
+# ==========================================
 
 # Quick test with small matrix and verification
 test: $(TARGET)
@@ -45,150 +279,10 @@ test: $(TARGET)
 	@echo "==================================="
 	./$(TARGET) 100 1 4 64
 
-# Test different matrix sizes (no verification for speed)
-test-sizes: $(TARGET)
-	@echo "==================================="
-	@echo "Testing Different Matrix Sizes"
-	@echo "==================================="
-	@echo ""
-	@echo "100x100:"
-	./$(TARGET) 100 0 8 64
-	@echo ""
-	@echo "1000x1000:"
-	./$(TARGET) 1000 0 8 128
-	@echo ""
-	@echo "2000x2000:"
-	./$(TARGET) 2000 0 8 128
-
-# Scalability study - varying thread counts
-scalability: $(TARGET)
-	@echo "==================================="
-	@echo "Scalability Study (1000x1000)"
-	@echo "==================================="
-	@echo ""
-	@echo "1 thread:"
-	./$(TARGET) 1000 0 1 128
-	@echo ""
-	@echo "2 threads:"
-	./$(TARGET) 1000 0 2 128
-	@echo ""
-	@echo "4 threads:"
-	./$(TARGET) 1000 0 4 128
-	@echo ""
-	@echo "8 threads:"
-	./$(TARGET) 1000 0 8 128
-	@echo ""
-	@echo "16 threads:"
-	./$(TARGET) 1000 0 16 128
-
-# Threshold study - testing different thresholds
-threshold-study: $(TARGET)
-	@echo "==================================="
-	@echo "Threshold Study (1000x1000, 8 threads)"
-	@echo "==================================="
-	@echo ""
-	@echo "Threshold = 32:"
-	./$(TARGET) 1000 0 8 32
-	@echo ""
-	@echo "Threshold = 64:"
-	./$(TARGET) 1000 0 8 64
-	@echo ""
-	@echo "Threshold = 128:"
-	./$(TARGET) 1000 0 8 128
-	@echo ""
-	@echo "Threshold = 256:"
-	./$(TARGET) 1000 0 8 256
-	@echo ""
-	@echo "Threshold = 512:"
-	./$(TARGET) 1000 0 8 512
-
-# Power-of-2 sizes (optimal for divide & conquer)
-test-power2: $(TARGET)
-	@echo "==================================="
-	@echo "Power-of-2 Sizes (Optimal)"
-	@echo "==================================="
-	@echo ""
-	@echo "128x128:"
-	./$(TARGET) 128 0 8 64
-	@echo ""
-	@echo "512x512:"
-	./$(TARGET) 512 0 8 128
-	@echo ""
-	@echo "1024x1024:"
-	./$(TARGET) 1024 0 8 128
-	@echo ""
-	@echo "2048x2048:"
-	./$(TARGET) 2048 0 8 128
-
-# Assignment sizes (100, 1000, 10000)
-assignment: $(TARGET)
-	@echo "==================================="
-	@echo "Assignment Sizes with Verification"
-	@echo "==================================="
-	@echo ""
-	@echo "100x100:"
-	./$(TARGET) 100 1 8 64
-	@echo ""
-	@echo "1000x1000:"
-	./$(TARGET) 1000 1 8 128
-	@echo ""
-	@echo "Note: 10000x10000 verification takes very long!"
-	@echo "Running 10000x10000 WITHOUT verification:"
-	./$(TARGET) 10000 0 8 128
-
-# Comprehensive benchmark for report
-benchmark: $(TARGET)
-	@echo "=========================================="
-	@echo "Comprehensive Benchmark Suite"
-	@echo "=========================================="
-	@echo ""
-	@echo "Part 1: Matrix Size Study"
-	@echo "------------------------------------------"
-	@echo "Size 100x100:"
-	./$(TARGET) 100 0 8 64
-	@echo ""
-	@echo "Size 500x500:"
-	./$(TARGET) 500 0 8 128
-	@echo ""
-	@echo "Size 1000x1000:"
-	./$(TARGET) 1000 0 8 128
-	@echo ""
-	@echo "Size 2000x2000:"
-	./$(TARGET) 2000 0 8 128
-	@echo ""
-	@echo "Size 5000x5000:"
-	./$(TARGET) 5000 0 8 128
-	@echo ""
-	@echo "Part 2: Scalability Study (1000x1000)"
-	@echo "------------------------------------------"
-	@for threads in 1 2 4 8 16; do \
-		echo "Threads: $$threads"; \
-		./$(TARGET) 1000 0 $$threads 128; \
-		echo ""; \
-	done
-	@echo ""
-	@echo "Part 3: Threshold Study (1000x1000, 8 threads)"
-	@echo "------------------------------------------"
-	@for thresh in 32 64 128 256; do \
-		echo "Threshold: $$thresh"; \
-		./$(TARGET) 1000 0 8 $$thresh; \
-		echo ""; \
-	done
-
-# Verify correctness for all assignment sizes
-verify-all: $(TARGET)
-	@echo "==================================="
-	@echo "Correctness Verification"
-	@echo "==================================="
-	@echo ""
-	@echo "Verifying 100x100..."
-	./$(TARGET) 100 1 4 64
-	@echo ""
-	@echo "Verifying 500x500..."
-	./$(TARGET) 500 1 4 128
-	@echo ""
-	@echo "Verifying 1000x1000..."
-	./$(TARGET) 1000 1 8 128
+# Run with default parameters
+run: $(TARGET)
+	@echo "Running with default parameters (1000x1000)..."
+	./$(TARGET) 1000
 
 # Check OpenMP support
 check-openmp:
@@ -213,12 +307,161 @@ info:
 	@if [ -f /proc/cpuinfo ]; then \
 		echo "  Model: $$(grep 'model name' /proc/cpuinfo | head -n 1 | cut -d: -f2 | sed 's/^[ \t]*//')"; \
 		echo "  Cores: $$(grep -c ^processor /proc/cpuinfo)"; \
+		echo "  Threads per core: $$(lscpu | grep 'Thread(s) per core' | awk '{print $$4}')"; \
 	else \
 		echo "  (CPU info not available)"; \
 	fi
 	@echo ""
+	@echo "Memory Info:"
+	@if [ -f /proc/meminfo ]; then \
+		echo "  Total: $$(grep MemTotal /proc/meminfo | awk '{print $$2/1000/1000 \" GB"}')"; \
+	else \
+		echo "  (Memory info not available)"; \
+	fi
+	@echo ""
 	@echo "OpenMP Info:"
 	@make check-openmp 2>/dev/null || echo "  Unable to check OpenMP"
+# Add these targets to your Makefile
+NUM_RUNS ?= 5
+THREADS_BENCH ?= 8
+
+
+# ==========================================
+# BENCHMARK LOGIC (SINGLE SIZE)
+# ==========================================
+# Benchmark a specific size N times and calculate average
+benchmark-size: $(TARGET)
+	@echo "=========================================="
+	@echo "Benchmarking: $(SIZE)x$(SIZE) matrix"
+	@echo "Threads: $(THREADS_BENCH)"
+	@echo "Number of runs: $(NUM_RUNS)"
+	@echo "=========================================="
+	@total=0; \
+	for i in $$(seq 1 $(NUM_RUNS)); do \
+		echo "Run $$i/$(NUM_RUNS)..."; \
+		output=$$(./$(TARGET) $(SIZE) 0 $(THREADS_BENCH) 2>&1); \
+		time=$$(echo "$$output" | grep -o "Time: [0-9.]*" | awk '{print $$2}'); \
+		if [ -n "$$time" ]; then \
+			total=$$(awk "BEGIN {printf \"%.6f\", $$total + $$time}"); \
+			echo "  Time: $$time seconds"; \
+		else \
+			echo "  Error: Could not parse time from output."; \
+		fi; \
+	done; \
+	avg=$$(awk "BEGIN {printf \"%.6f\", $$total / $(NUM_RUNS)}"); \
+	echo ""; \
+	echo "Average time: $$avg seconds"; \
+	echo "=========================================="
+
+# ==========================================
+# WRAPPERS FOR SPECIFIC SIZES
+# ==========================================
+# These call the benchmark-size target recursively
+
+benchmark-100: $(TARGET)
+	@$(MAKE) --no-print-directory benchmark-size SIZE=100 NUM_RUNS=$(NUM_RUNS) THREADS_BENCH=$(THREADS_BENCH)
+
+benchmark-1000: $(TARGET)
+	@$(MAKE) --no-print-directory benchmark-size SIZE=1000 NUM_RUNS=$(NUM_RUNS) THREADS_BENCH=$(THREADS_BENCH)
+
+benchmark-10000: $(TARGET)
+	@$(MAKE) --no-print-directory benchmark-size SIZE=10000 NUM_RUNS=$(NUM_RUNS) THREADS_BENCH=$(THREADS_BENCH)
+
+# ==========================================
+# COMPARISON REPORTS (CSV GENERATION)
+# ==========================================
+
+# Compare 100, 1000, 10000 and save to CSV
+compare-assignment: $(TARGET)
+	@echo "=========================================="
+	@echo "COMPARING ASSIGNMENT SIZES (OpenMP)"
+	@echo "Sizes: 100, 1000, 10000"
+	@echo "Threads: $(THREADS_BENCH)"
+	@echo "Runs per size: $(NUM_RUNS)"
+	@echo "=========================================="
+	@echo ""
+	@echo "Size,Run,Time(s)" > comparison_results.csv
+	
+	@# Test 100
+	@echo "Testing 100x100..."
+	@total_100=0; \
+	for i in $$(seq 1 $(NUM_RUNS)); do \
+		echo "  Run $$i/$(NUM_RUNS)..."; \
+		output=$$(./$(TARGET) 100 0 $(THREADS_BENCH) 2>&1); \
+		time=$$(echo "$$output" | grep -o "Time: [0-9.]*" | awk '{print $$2}'); \
+		if [ -n "$$time" ]; then \
+			total_100=$$(awk "BEGIN {printf \"%.9f\", $$total_100 + $$time}"); \
+			echo "100,$$i,$$time" >> comparison_results.csv; \
+			echo "    Time: $$time seconds"; \
+		fi; \
+	done; \
+	avg_100=$$(awk "BEGIN {printf \"%.6f\", $$total_100 / $(NUM_RUNS)}"); \
+	echo "  Average: $$avg_100 seconds"; \
+	echo ""
+
+	@# Test 1000
+	@echo "Testing 1000x1000..."
+	@total_1000=0; \
+	for i in $$(seq 1 $(NUM_RUNS)); do \
+		echo "  Run $$i/$(NUM_RUNS)..."; \
+		output=$$(./$(TARGET) 1000 0 $(THREADS_BENCH) 2>&1); \
+		time=$$(echo "$$output" | grep -o "Time: [0-9.]*" | awk '{print $$2}'); \
+		if [ -n "$$time" ]; then \
+			total_1000=$$(awk "BEGIN {printf \"%.9f\", $$total_1000 + $$time}"); \
+			echo "1000,$$i,$$time" >> comparison_results.csv; \
+			echo "    Time: $$time seconds"; \
+		fi; \
+	done; \
+	avg_1000=$$(awk "BEGIN {printf \"%.6f\", $$total_1000 / $(NUM_RUNS)}"); \
+	echo "  Average: $$avg_1000 seconds"; \
+	echo ""
+
+	@# Test 10000
+	@echo "Testing 10000x10000..."
+	@total_10000=0; \
+	for i in $$(seq 1 $(NUM_RUNS)); do \
+		echo "  Run $$i/$(NUM_RUNS)..."; \
+		output=$$(./$(TARGET) 10000 0 $(THREADS_BENCH) 2>&1); \
+		time=$$(echo "$$output" | grep -o "Time: [0-9.]*" | awk '{print $$2}'); \
+		if [ -n "$$time" ]; then \
+			total_10000=$$(awk "BEGIN {printf \"%.9f\", $$total_10000 + $$time}"); \
+			echo "10000,$$i,$$time" >> comparison_results.csv; \
+			echo "    Time: $$time seconds"; \
+		fi; \
+	done; \
+	avg_10000=$$(awk "BEGIN {printf \"%.6f\", $$total_10000 / $(NUM_RUNS)}"); \
+	echo "  Average: $$avg_10000 seconds"; \
+	echo ""
+	
+	@echo "=========================================="
+	@echo "SUMMARY (Average of $(NUM_RUNS) runs)"
+	@echo "=========================================="
+	@echo "  100x100:      $$avg_100 seconds"
+	@echo "  1000x1000:    $$avg_1000 seconds"
+	@echo "  10000x10000:  $$avg_10000 seconds"
+	@echo "=========================================="
+	@echo "Results saved to: comparison_results.csv"
+
+# ==========================================
+# SHORTCUT TARGETS
+# ==========================================
+
+# Visual comparison (just prints to screen, doesn't make CSV)
+compare-all:
+	@$(MAKE) --no-print-directory benchmark-100
+	@echo ""
+	@$(MAKE) --no-print-directory benchmark-1000
+	@echo ""
+	@$(MAKE) --no-print-directory benchmark-10000
+
+# Quick comparison with 3 runs
+compare-quick:
+	@$(MAKE) --no-print-directory compare-assignment NUM_RUNS=3
+
+# Full comparison with 10 runs for report
+compare-report:
+	@$(MAKE) --no-print-directory compare-assignment NUM_RUNS=10
+
 
 # Help message
 help:
@@ -226,45 +469,67 @@ help:
 	@echo "OpenMP Divide & Conquer Matrix Multiplication"
 	@echo "=========================================="
 	@echo ""
-	@echo "Build targets:"
+	@echo "BUILD:"
 	@echo "  make              - Build the program"
-	@echo "  make clean        - Remove build files"
+	@echo "  make clean        - Remove all build and result files"
 	@echo ""
-	@echo "Testing targets:"
-	@echo "  make test         - Quick test (100x100 with verification)"
-	@echo "  make run          - Run with defaults (1000x1000)"
-	@echo "  make test-sizes   - Test multiple sizes"
-	@echo "  make test-power2  - Test power-of-2 sizes (optimal)"
-	@echo "  make assignment   - Run assignment sizes (100, 1000, 10000)"
+	@echo "ASSIGNMENT TESTS (Required for report):"
+	@echo "  make test-assignment-sizes      - Test 100, 1000, 10000 (REQUIRED)"
+	@echo "  make test-scalability-all       - Thread scaling for all sizes (REQUIRED)"
+	@echo "  make test-threshold-all         - Threshold optimization (REQUIRED)"
+	@echo "  make test-correctness           - Verify results (REQUIRED)"
 	@echo ""
-	@echo "Analysis targets:"
-	@echo "  make scalability  - Thread count study"
-	@echo "  make threshold-study - Threshold optimization study"
-	@echo "  make benchmark    - Comprehensive benchmark suite"
-	@echo "  make verify-all   - Verify correctness for all sizes"
+	@echo "INDIVIDUAL TEST CASES:"
+	@echo "  make test-scalability-100       - Thread scaling for 100x100"
+	@echo "  make test-scalability-1000      - Thread scaling for 1000x1000"
+	@echo "  make test-scalability-10000     - Thread scaling for 10000x10000"
+	@echo "  make test-threshold-100         - Threshold tuning for 100x100"
+	@echo "  make test-threshold-1000        - Threshold tuning for 1000x1000"
+	@echo "  make test-threshold-10000       - Threshold tuning for 10000x10000"
+	@echo "  make test-thread-configs        - Various thread configurations"
 	@echo ""
-	@echo "Utility targets:"
-	@echo "  make check-openmp - Check if OpenMP is available"
-	@echo "  make info         - Show system information"
-	@echo "  make help         - Show this help message"
+	@echo "COMPREHENSIVE SUITES:"
+	@echo "  make test-all                   - Run ALL test cases"
+	@echo "  make test-quick                 - Essential tests only"
+	@echo "  make test-report                - Generate complete report data"
 	@echo ""
-	@echo "Manual execution:"
+	@echo "MULTI-MACHINE TESTING:"
+	@echo "  make test-machine-1             - Test on machine 1 (save to file)"
+	@echo "  make test-machine-2             - Test on machine 2 (save to file)"
+	@echo "  make test-machine-3             - Test on machine 3 (save to file)"
+	@echo ""
+	@echo "DATA EXPORT:"
+	@echo "  make export-csv                 - Export data in CSV format"
+	@echo ""
+	@echo "UTILITIES:"
+	@echo "  make test                       - Quick test (100x100)"
+	@echo "  make run                        - Default run (1000x1000)"
+	@echo "  make check-openmp               - Check OpenMP availability"
+	@echo "  make info                       - Show system information"
+	@echo "  make help                       - Show this help"
+	@echo ""
+	@echo "MANUAL EXECUTION:"
 	@echo "  ./$(TARGET) <size> [verify] [threads] [threshold]"
 	@echo ""
-	@echo "  Arguments:"
-	@echo "    size      - Matrix dimension (e.g., 1000)"
-	@echo "    verify    - 0=skip verification, 1=verify (default: 1)"
-	@echo "    threads   - Number of OpenMP threads (default: max available)"
-	@echo "    threshold - Base case size (default: 128)"
-	@echo ""
 	@echo "  Examples:"
-	@echo "    ./$(TARGET) 1000                  # 1000x1000, verify, max threads, threshold=128"
-	@echo "    ./$(TARGET) 2000 0                # 2000x2000, no verify"
-	@echo "    ./$(TARGET) 1000 1 8              # 1000x1000, verify, 8 threads"
-	@echo "    ./$(TARGET) 1000 0 16 64          # 1000x1000, no verify, 16 threads, threshold=64"
+	@echo "    ./$(TARGET) 1000              - 1000x1000, verify, max threads"
+	@echo "    ./$(TARGET) 2000 0            - 2000x2000, no verify"
+	@echo "    ./$(TARGET) 1000 1 8          - 1000x1000, verify, 8 threads"
+	@echo "    ./$(TARGET) 1000 0 16 64      - Full control"
 	@echo ""
-	@echo "⚠️  Note: Non-power-of-2 sizes will fall back to naive multiplication"
-	@echo "          for odd-sized blocks, reducing parallelism."
+	@echo "RECOMMENDED FOR ASSIGNMENT:"
+	@echo "  1. make test-report             - Generate all data"
+	@echo "  2. make test-machine-1          - Test on your laptop"
+	@echo "  3. make test-machine-2          - Test on lab machine"
+	@echo "  4. make test-machine-3          - Test on cluster"
 
-.PHONY: all clean run test test-sizes scalability threshold-study test-power2 \
-        assignment benchmark verify-all check-openmp info help
+.PHONY: all clean run test test-assignment-sizes test-scalability-100 \
+        test-scalability-1000 test-scalability-10000 test-scalability-all \
+        test-threshold-100 test-threshold-1000 test-threshold-10000 \
+        test-threshold-all test-correctness test-power2-comparison \
+        test-thread-configs \
+        test-all test-quick test-report \
+        export-csv test-current-machine test-machine-1 test-machine-2 \
+        test-machine-3 check-openmp info help \
+		clean benchmark-size benchmark-100 benchmark-1000 benchmark-10000 \
+        compare-assignment compare-all compare-quick compare-report
