@@ -1,0 +1,6 @@
+# MPI Hostfile for 2-Machine Cluster via WireGuard
+# Machine 1: danhbuonba (10.0.0.2)
+# Machine 2: danhvuive (10.0.0.1)
+
+danhbuonba@10.0.0.2 slots=8
+danhvuive@10.0.0.1 slots=8
