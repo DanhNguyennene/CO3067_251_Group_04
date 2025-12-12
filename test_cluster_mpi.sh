@@ -137,22 +137,20 @@ if [ -f ./mpi_program ]; then
         echo "Date: $(date)"
         echo ""
         
+        # MPI Strassen requires exactly 7 processes (one for each of the 7 Strassen sub-problems)
         for size in 100 1000 4000; do
             echo "=========================================="
             echo "Matrix Size: ${size}x${size}"
             echo "=========================================="
             
-            # Test with different process counts
-            for procs in 1 2 4 7 8; do
-                echo ""
-                echo "--- Processes: $procs ---"
-                
-                if [ $size -le 1000 ]; then
-                    mpirun $MPI_OPTS -np $procs ./mpi_program $size 1
-                else
-                    mpirun $MPI_OPTS -np $procs ./mpi_program $size 0
-                fi
-            done
+            echo ""
+            echo "--- Processes: 7 (required by Strassen algorithm) ---"
+            
+            if [ $size -le 1000 ]; then
+                mpirun $MPI_OPTS -np 7 ./mpi_program $size 1
+            else
+                mpirun $MPI_OPTS -np 7 ./mpi_program $size 0
+            fi
             echo ""
         done
     } 2>&1 | tee "$OUTPUT_DIR/mpi_strassen_results.txt"
@@ -181,23 +179,22 @@ if [ -f ./main ]; then
         echo "Date: $(date)"
         echo ""
         
+        # Hybrid Strassen requires exactly 7 MPI processes, but can vary OpenMP threads
         for size in 100 1000 4000; do
             echo "=========================================="
             echo "Matrix Size: ${size}x${size}"
             echo "=========================================="
             
-            # Test combinations of MPI processes and OpenMP threads
-            for procs in 1 2 4; do
-                for threads in 1 2 4; do
-                    echo ""
-                    echo "--- Processes: $procs, Threads: $threads ---"
-                    
-                    if [ $size -le 1000 ]; then
-                        mpirun $MPI_OPTS -np $procs -x OMP_NUM_THREADS=$threads ./main $size 1 $threads 128
-                    else
-                        mpirun $MPI_OPTS -np $procs -x OMP_NUM_THREADS=$threads ./main $size 0 $threads 128
-                    fi
-                done
+            # Test with 7 MPI processes and different OpenMP thread counts
+            for threads in 1 2 4 8; do
+                echo ""
+                echo "--- Processes: 7, Threads: $threads ---"
+                
+                if [ $size -le 1000 ]; then
+                    mpirun $MPI_OPTS -np 7 -x OMP_NUM_THREADS=$threads ./main $size 1 $threads 128
+                else
+                    mpirun $MPI_OPTS -np 7 -x OMP_NUM_THREADS=$threads ./main $size 0 $threads 128
+                fi
             done
             echo ""
         done
