@@ -7,11 +7,13 @@
 # ==============================================
 
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-OUTPUT_DIR="results_MPI_HPCC_${TIMESTAMP}"
 
 # Use HOME directory - same on all nodes
 BASE_DIR="$HOME/CO3067_251_Group_04"
 HOSTFILE="$BASE_DIR/hostfile"
+
+# Output directory INSIDE the repo so it gets saved
+OUTPUT_DIR="$BASE_DIR/results_MPI_HPCC_${TIMESTAMP}"
 
 # Discover all nodes in 10.1.8.0/24 network or use provided hostfile
 # MPI options for HPCC cluster
@@ -257,13 +259,17 @@ echo "Generating summary..."
     grep -E "(Matrix Size|Processes:|Threads:|Total execution time|PASSED|FAILED|completed)" "$OUTPUT_DIR/hybrid_strassen_results.txt" 2>/dev/null || echo "No results"
 } > "$OUTPUT_DIR/SUMMARY.txt"
 
-# Copy results to repo directory
-cp -r "$OUTPUT_DIR" "$BASE_DIR/" 2>/dev/null || true
-
 echo ""
 echo "=============================================="
 echo "HPCC CLUSTER TESTING COMPLETE!"
 echo "=============================================="
 echo "Results saved to: $OUTPUT_DIR/"
-echo "Also copied to: $BASE_DIR/$OUTPUT_DIR/"
+ls -la "$OUTPUT_DIR/"
+
+echo ""
+echo "To push results to GitHub, run:"
+echo "  cd $BASE_DIR"
+echo "  git add ."
+echo "  git commit -m 'HPCC cluster results'"
+echo "  git push origin main"
 ls -la "$OUTPUT_DIR/"
