@@ -34,25 +34,22 @@ if [ ! -d "$BASE_DIR" ]; then
     git clone https://github.com/DanhNguyennene/CO3067_251_Group_04.git
 fi
 
-# Update repo
 cd "$BASE_DIR"
 git pull origin main 2>/dev/null || true
 
-# Create/update hostfile - discover nodes or use predefined list
-# You can modify this list based on available nodes
 if [ ! -f "$HOSTFILE" ] || [ "$1" == "--refresh-hosts" ]; then
     echo "Creating hostfile..."
-    # Try to discover nodes, or use a predefined list
-    # Modify these IPs based on your actual HPCC nodes
     cat > "$HOSTFILE" << 'EOF'
-10.1.8.1 slots=4
-10.1.8.2 slots=4
-10.1.8.3 slots=4
-10.1.8.4 slots=4
-10.1.8.5 slots=4
-10.1.8.6 slots=4
-10.1.8.7 slots=4
-10.1.8.8 slots=4
+10.1.8.71 slots=4
+10.1.8.72 slots=4
+10.1.8.73 slots=4
+10.1.8.74 slots=4
+10.1.8.75 slots=4
+10.1.8.76 slots=4
+10.1.8.77 slots=4
+10.1.8.78 slots=4
+10.1.8.79 slots=4
+10.1.8.80 slots=4
 EOF
 fi
 
@@ -60,12 +57,10 @@ echo "Hostfile:"
 cat "$HOSTFILE"
 echo ""
 
-# Get list of nodes from hostfile
 NODES=$(grep -oE '10\.1\.8\.[0-9]+' "$HOSTFILE" | sort -u)
 NODE_COUNT=$(echo "$NODES" | wc -l)
 echo "Found $NODE_COUNT nodes in hostfile"
 
-# Clone/update repo on all nodes
 echo ""
 echo "Setting up code on all nodes..."
 for node in $NODES; do
