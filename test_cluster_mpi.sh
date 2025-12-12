@@ -1,35 +1,73 @@
 #!/bin/bash
 
 # ==============================================
-# MPI Testing Script for HPCC Cluster
-# Run this ONLY on gateway.hpcc.vn
+# MPI Testing Script for 2-Machine Cluster
+# Machines connected via WireGuard tunnel
+# Machine 1: danhbuonba@10.0.0.2 (local)
+# Machine 2: danhvuive@10.0.0.1 (remote)
 # ==============================================
 
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-OUTPUT_DIR="results_MPI_HPCC_Cluster_${TIMESTAMP}"
+OUTPUT_DIR="results_MPI_Cluster_${TIMESTAMP}"
+
+# Use common path that exists on both machines
+BASE_DIR="$HOME/mpi_cluster_para_assignment"
+HOSTFILE="$BASE_DIR/hostfile"
+
+# MPI options for cluster (use WireGuard network 10.0.0.0/24)
+MPI_OPTS="--hostfile $HOSTFILE --mca btl tcp,self --mca btl_tcp_if_include 10.0.0.0/24 --mca oob_tcp_if_include 10.0.0.0/24"
 
 mkdir -p "$OUTPUT_DIR"
 
 echo "=============================================="
-echo "MPI TESTS - DISTRIBUTED MEMORY PLATFORM"
-echo "HPCC Cluster (gateway.hpcc.vn)"
+echo "MPI TESTS - 2-MACHINE CLUSTER (WireGuard)"
 echo "=============================================="
 echo "Date: $(date)"
 echo "Output: $OUTPUT_DIR"
+echo "Base Dir: $BASE_DIR"
 echo "=============================================="
+
+# Create hostfile
+cat > "$HOSTFILE" << 'EOF'
+10.0.0.2 slots=8
+10.0.0.1 slots=8
+EOF
+
+echo "Hostfile created:"
+cat "$HOSTFILE"
+echo ""
+
+# Test cluster connectivity
+echo "Testing cluster connectivity..."
+if ! ssh -o BatchMode=yes -o ConnectTimeout=5 10.0.0.1 "echo 'Remote OK'" 2>/dev/null; then
+    echo "ERROR: Cannot connect to remote machine 10.0.0.1"
+    echo "Make sure WireGuard is up and SSH is configured"
+    exit 1
+fi
+echo "Cluster connectivity: OK"
+echo ""
+
+# Sync code to remote machine
+echo "Syncing code to remote machine..."
+rsync -az --exclude='*.o' --exclude='main' --exclude='mpi_program' --exclude='optimized_main' \
+    "$BASE_DIR/" 10.0.0.1:"$BASE_DIR/"
+echo "Sync complete"
+echo ""
 
 # System Information
 {
     echo "=== CLUSTER SYSTEM INFORMATION ==="
-    echo "Hostname: $(hostname)"
+    echo "Local Hostname: $(hostname)"
+    echo "Remote Hostname: $(ssh 10.0.0.1 hostname)"
     echo "Date: $(date)"
     echo "User: $(whoami)"
-    echo "CPU Cores available: $(nproc)"
-    which mpirun && mpirun --version | head -2
+    echo "Local CPU Cores: $(nproc)"
+    echo "Remote CPU Cores: $(ssh 10.0.0.1 nproc)"
+    echo "MPI Version:"
+    mpirun --version | head -2
     echo ""
 } | tee "$OUTPUT_DIR/system_info.txt"
 
-BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$BASE_DIR"
 
 # ==============================================
@@ -40,42 +78,43 @@ echo "=============================================="
 echo "Testing: MPI Naive Matrix Multiplication"
 echo "=============================================="
 
-cd mpi-naive
+cd "$BASE_DIR/mpi-naive"
 make clean && make
 
-if [ $? -eq 0 ]; then
+# Compile on remote too
+ssh 10.0.0.1 "cd $BASE_DIR/mpi-naive && make clean && make" 2>&1 | tail -3
+
+if [ -f ./mpi_program ]; then
     {
         echo "=== MPI Naive Results ==="
-        echo "Platform: HPCC Cluster"
+        echo "Platform: 2-Machine Cluster (WireGuard)"
         echo "Date: $(date)"
         echo ""
         
-        for size in 100 1000 10000; do
+        for size in 100 1000 4000; do
             echo "=========================================="
             echo "Matrix Size: ${size}x${size}"
             echo "=========================================="
             
-            # Test different process counts (N must be divisible)
-            for procs in 1 2 4 5 8 10 20; do
+            # Test different process counts
+            for procs in 1 2 4 8 16; do
                 if [ $((size % procs)) -eq 0 ]; then
                     echo ""
                     echo "--- Processes: $procs ---"
                     
                     if [ $size -le 1000 ]; then
-                        mpirun -np $procs ./mpi_program $size 1
+                        mpirun $MPI_OPTS -np $procs ./mpi_program $size 1
                     else
-                        mpirun -np $procs ./mpi_program $size 0
+                        mpirun $MPI_OPTS -np $procs ./mpi_program $size 0
                     fi
                 fi
             done
             echo ""
         done
-    } 2>&1 | tee "../$OUTPUT_DIR/mpi_naive_results.txt"
+    } 2>&1 | tee "$OUTPUT_DIR/mpi_naive_results.txt"
 else
-    echo "Build failed for MPI Naive" | tee "../$OUTPUT_DIR/mpi_naive_results.txt"
+    echo "Build failed for MPI Naive" | tee "$OUTPUT_DIR/mpi_naive_results.txt"
 fi
-
-cd "$BASE_DIR"
 
 # ==============================================
 # Test MPI Strassen
@@ -85,40 +124,41 @@ echo "=============================================="
 echo "Testing: MPI Strassen Matrix Multiplication"
 echo "=============================================="
 
-cd mpi-strassen
+cd "$BASE_DIR/mpi-strassen"
 make clean && make
 
-if [ $? -eq 0 ]; then
+# Compile on remote too
+ssh 10.0.0.1 "cd $BASE_DIR/mpi-strassen && make clean && make" 2>&1 | tail -3
+
+if [ -f ./mpi_program ]; then
     {
         echo "=== MPI Strassen Results ==="
-        echo "Platform: HPCC Cluster"
+        echo "Platform: 2-Machine Cluster (WireGuard)"
         echo "Date: $(date)"
         echo ""
         
-        for size in 100 1000 10000; do
+        for size in 100 1000 4000; do
             echo "=========================================="
             echo "Matrix Size: ${size}x${size}"
             echo "=========================================="
             
-            # Strassen uses 7 sub-problems, so test with 1 and 7 processes
-            for procs in 1 7; do
+            # Test with different process counts
+            for procs in 1 2 4 7 8; do
                 echo ""
                 echo "--- Processes: $procs ---"
                 
                 if [ $size -le 1000 ]; then
-                    mpirun -np $procs ./mpi_program $size 1
+                    mpirun $MPI_OPTS -np $procs ./mpi_program $size 1
                 else
-                    mpirun -np $procs ./mpi_program $size 0
+                    mpirun $MPI_OPTS -np $procs ./mpi_program $size 0
                 fi
             done
             echo ""
         done
-    } 2>&1 | tee "../$OUTPUT_DIR/mpi_strassen_results.txt"
+    } 2>&1 | tee "$OUTPUT_DIR/mpi_strassen_results.txt"
 else
-    echo "Build failed for MPI Strassen" | tee "../$OUTPUT_DIR/mpi_strassen_results.txt"
+    echo "Build failed for MPI Strassen" | tee "$OUTPUT_DIR/mpi_strassen_results.txt"
 fi
-
-cd "$BASE_DIR"
 
 # ==============================================
 # Test Hybrid MPI + OpenMP
@@ -128,44 +168,43 @@ echo "=============================================="
 echo "Testing: Hybrid MPI+OpenMP Strassen"
 echo "=============================================="
 
-cd hybrid-strassen
+cd "$BASE_DIR/hybrid-strassen"
 make clean && make
 
-if [ $? -eq 0 ]; then
+# Compile on remote too
+ssh 10.0.0.1 "cd $BASE_DIR/hybrid-strassen && make clean && make" 2>&1 | tail -3
+
+if [ -f ./main ]; then
     {
         echo "=== Hybrid MPI+OpenMP Results ==="
-        echo "Platform: HPCC Cluster"
+        echo "Platform: 2-Machine Cluster (WireGuard)"
         echo "Date: $(date)"
         echo ""
         
-        for size in 100 1000 10000; do
+        for size in 100 1000 4000; do
             echo "=========================================="
             echo "Matrix Size: ${size}x${size}"
             echo "=========================================="
             
             # Test combinations of MPI processes and OpenMP threads
-            for procs in 1 2 4 7; do
-                for threads in 1 2 4 8; do
+            for procs in 1 2 4; do
+                for threads in 1 2 4; do
                     echo ""
                     echo "--- Processes: $procs, Threads: $threads ---"
                     
-                    export OMP_NUM_THREADS=$threads
-                    
                     if [ $size -le 1000 ]; then
-                        mpirun -np $procs ./main $size 1 $threads 128
+                        mpirun $MPI_OPTS -np $procs -x OMP_NUM_THREADS=$threads ./main $size 1 $threads 128
                     else
-                        mpirun -np $procs ./main $size 0 $threads 128
+                        mpirun $MPI_OPTS -np $procs -x OMP_NUM_THREADS=$threads ./main $size 0 $threads 128
                     fi
                 done
             done
             echo ""
         done
-    } 2>&1 | tee "../$OUTPUT_DIR/hybrid_strassen_results.txt"
+    } 2>&1 | tee "$OUTPUT_DIR/hybrid_strassen_results.txt"
 else
-    echo "Build failed for Hybrid Strassen" | tee "../$OUTPUT_DIR/hybrid_strassen_results.txt"
+    echo "Build failed for Hybrid Strassen" | tee "$OUTPUT_DIR/hybrid_strassen_results.txt"
 fi
-
-cd "$BASE_DIR"
 
 # ==============================================
 # Generate Summary
@@ -174,7 +213,7 @@ echo ""
 echo "Generating summary..."
 
 {
-    echo "=== MPI BENCHMARK SUMMARY (HPCC Cluster) ==="
+    echo "=== MPI BENCHMARK SUMMARY (2-Machine Cluster) ==="
     echo "Date: $(date)"
     echo ""
     echo "--- MPI Naive ---"
@@ -187,9 +226,12 @@ echo "Generating summary..."
     grep -E "(Matrix Size|Processes:|Threads:|Total execution time|PASSED|FAILED)" "$OUTPUT_DIR/hybrid_strassen_results.txt" 2>/dev/null || echo "No results"
 } > "$OUTPUT_DIR/SUMMARY.txt"
 
+# Copy results back to original directory
+cp -r "$OUTPUT_DIR" /mnt/c/Just_Learning/University/sem_9/parallel/btl/Parallel_Computing/ 2>/dev/null || true
+
 echo ""
 echo "=============================================="
-echo "MPI TESTING COMPLETE!"
+echo "MPI CLUSTER TESTING COMPLETE!"
 echo "=============================================="
 echo "Results saved to: $OUTPUT_DIR/"
 ls -la "$OUTPUT_DIR/"
