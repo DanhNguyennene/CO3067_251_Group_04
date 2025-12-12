@@ -4,6 +4,7 @@
 # MPI Testing Script for HPCC Cluster
 # Network: 10.1.8.0/24
 # Clone repo: git clone https://github.com/DanhNguyennene/CO3067_251_Group_04.git
+# Supports both OpenMPI and MPICH
 # ==============================================
 
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
@@ -15,9 +16,17 @@ HOSTFILE="$BASE_DIR/hostfile"
 # Output directory INSIDE the repo so it gets saved
 OUTPUT_DIR="$BASE_DIR/results_MPI_HPCC_${TIMESTAMP}"
 
-# Discover all nodes in 10.1.8.0/24 network or use provided hostfile
-# MPI options for HPCC cluster
-MPI_OPTS="--hostfile $HOSTFILE --mca btl tcp,self --mca btl_tcp_if_include 10.1.8.0/24 --mca oob_tcp_if_include 10.1.8.0/24"
+# Detect MPI implementation
+if mpirun --version 2>&1 | grep -q "Open MPI"; then
+    MPI_TYPE="openmpi"
+    MPI_OPTS="-hostfile $HOSTFILE --mca btl tcp,self --mca btl_tcp_if_include 10.1.8.0/24 --mca oob_tcp_if_include 10.1.8.0/24"
+else
+    MPI_TYPE="mpich"
+    # MPICH uses -f for hostfile and doesn't need mca options
+    MPI_OPTS="-f $HOSTFILE"
+fi
+
+echo "Detected MPI: $MPI_TYPE"
 
 mkdir -p "$OUTPUT_DIR"
 
@@ -27,6 +36,7 @@ echo "=============================================="
 echo "Date: $(date)"
 echo "Output: $OUTPUT_DIR"
 echo "Base Dir: $BASE_DIR"
+echo "MPI Type: $MPI_TYPE"
 echo "=============================================="
 
 # ==============================================
@@ -75,8 +85,10 @@ cd "$BASE_DIR"
 git pull origin main 2>/dev/null || true
 
 if [ ! -f "$HOSTFILE" ] || [ "$1" == "--refresh-hosts" ]; then
-    echo "Creating hostfile..."
-    cat > "$HOSTFILE" << 'EOF'
+    echo "Creating hostfile for $MPI_TYPE..."
+    if [ "$MPI_TYPE" == "openmpi" ]; then
+        # OpenMPI format: hostname slots=N
+        cat > "$HOSTFILE" << 'EOF'
 10.1.8.71 slots=4
 10.1.8.72 slots=4
 10.1.8.73 slots=4
@@ -88,6 +100,21 @@ if [ ! -f "$HOSTFILE" ] || [ "$1" == "--refresh-hosts" ]; then
 10.1.8.79 slots=4
 10.1.8.80 slots=4
 EOF
+    else
+        # MPICH format: just hostnames, one per line (repeat for multiple slots)
+        cat > "$HOSTFILE" << 'EOF'
+10.1.8.71:4
+10.1.8.72:4
+10.1.8.73:4
+10.1.8.74:4
+10.1.8.75:4
+10.1.8.76:4
+10.1.8.77:4
+10.1.8.78:4
+10.1.8.79:4
+10.1.8.80:4
+EOF
+    fi
 fi
 
 echo "Hostfile:"
@@ -256,10 +283,17 @@ if [ -f ./main ]; then
                 echo ""
                 echo "--- Processes: 7, Threads: $threads ---"
                 
-                if [ $size -le 1000 ]; then
-                    mpirun $MPI_OPTS -np 7 -x OMP_NUM_THREADS=$threads ./main $size 1 $threads 128
+                # Set OMP_NUM_THREADS - syntax differs between OpenMPI and MPICH
+                if [ "$MPI_TYPE" == "openmpi" ]; then
+                    ENV_OPT="-x OMP_NUM_THREADS=$threads"
                 else
-                    mpirun $MPI_OPTS -np 7 -x OMP_NUM_THREADS=$threads ./main $size 0 $threads 128
+                    ENV_OPT="-env OMP_NUM_THREADS $threads"
+                fi
+                
+                if [ $size -le 1000 ]; then
+                    mpirun $MPI_OPTS -np 7 $ENV_OPT ./main $size 1 $threads 128
+                else
+                    mpirun $MPI_OPTS -np 7 $ENV_OPT ./main $size 0 $threads 128
                 fi
             done
             echo ""
