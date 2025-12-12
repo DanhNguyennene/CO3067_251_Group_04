@@ -29,6 +29,41 @@ echo "Output: $OUTPUT_DIR"
 echo "Base Dir: $BASE_DIR"
 echo "=============================================="
 
+# ==============================================
+# Handle --clean option: remove repos and results from all nodes
+# ==============================================
+if [ "$1" == "--clean" ]; then
+    echo ""
+    echo "=============================================="
+    echo "CLEANING ALL NODES"
+    echo "=============================================="
+    
+    # Read hostfile if exists
+    if [ -f "$HOSTFILE" ]; then
+        NODES=$(grep -oE '10\.1\.8\.[0-9]+' "$HOSTFILE" | sort -u)
+    else
+        # Default nodes
+        NODES="10.1.8.71 10.1.8.72 10.1.8.73 10.1.8.74 10.1.8.75 10.1.8.76 10.1.8.77 10.1.8.78 10.1.8.79 10.1.8.80"
+    fi
+    
+    for node in $NODES; do
+        echo -n "  Cleaning $node: "
+        ssh -o BatchMode=yes -o ConnectTimeout=5 "$node" "
+            rm -rf ~/CO3067_251_Group_04
+            echo 'done'
+        " 2>/dev/null || echo "FAILED"
+    done
+    
+    # Clean local too
+    echo -n "  Cleaning local: "
+    rm -rf "$BASE_DIR"
+    echo "done"
+    
+    echo ""
+    echo "All nodes cleaned!"
+    exit 0
+fi
+
 # Check if repo exists, if not clone it
 if [ ! -d "$BASE_DIR" ]; then
     echo "Cloning repository..."
@@ -68,13 +103,9 @@ echo "Setting up code on all nodes..."
 for node in $NODES; do
     echo -n "  $node: "
     ssh -o BatchMode=yes -o ConnectTimeout=5 "$node" "
-        if [ ! -d '$BASE_DIR' ]; then
-            cd \$HOME && git clone https://github.com/DanhNguyennene/CO3067_251_Group_04.git 2>/dev/null
-            echo 'cloned'
-        else
-            cd '$BASE_DIR' && git pull origin main 2>/dev/null
-            echo 'updated'
-        fi
+        rm -rf ~/CO3067_251_Group_04
+        cd \$HOME && git clone https://github.com/DanhNguyennene/CO3067_251_Group_04.git 2>/dev/null
+        echo 'fresh clone'
     " 2>/dev/null || echo "FAILED (skipping)"
 done
 echo ""
