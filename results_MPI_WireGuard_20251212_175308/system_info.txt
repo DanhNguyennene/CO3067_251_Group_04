@@ -1,0 +1,16 @@
+=== CLUSTER SYSTEM INFORMATION ===
+Master Hostname: danhRemoteStation
+Date: Fri Dec 12 17:53:12 +07 2025
+User: danhbuonba
+Nodes in hostfile: 2
+Reachable nodes: 2
+Using hostfile: true
+Local CPU Cores: 8
+MPI Version:
+mpirun (Open MPI) 4.1.6
+
+
+Node Details:
+  danhbuonba@10.0.0.2: 8 cores
+  danhvuive@10.0.0.1: 20 cores
+

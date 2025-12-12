@@ -1,0 +1,209 @@
+=== MPI Naive Results ===
+Platform: Distributed Cluster
+Date: Fri Dec 12 17:53:17 +07 2025
+Using hostfile: true
+
+==========================================
+Matrix Size: 100x100
+==========================================
+
+--- Processes: 1 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 9.2306e-05 seconds
+Maximum local computation time among processes: 8.2374e-05 seconds
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.000276572s
+
+Relative L2 error: 0.000000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.55x
+================================================
+
+--- Processes: 2 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 0.0106177 seconds
+Maximum local computation time among processes: 4.7754e-05 seconds
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.00027203s
+
+Relative L2 error: 0.000000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.02x
+================================================
+
+--- Processes: 4 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 0.0351109 seconds
+Maximum local computation time among processes: 4.4695e-05 seconds
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.000431982s
+
+Relative L2 error: 0.000000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.01x
+================================================
+
+==========================================
+Matrix Size: 1000x1000
+==========================================
+
+--- Processes: 1 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 0.115776 seconds
+Maximum local computation time among processes: 0.115073 seconds
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.550337s
+
+Relative L2 error: 0.000000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.82x
+================================================
+
+--- Processes: 2 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 0.0834282 seconds
+Maximum local computation time among processes: 0.0752107 seconds
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.640418s
+
+Relative L2 error: 0.000000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.88x
+================================================
+
+--- Processes: 4 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 0.134296 seconds
+Maximum local computation time among processes: 0.0895094 seconds
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.890162s
+
+Relative L2 error: 0.000000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.87x
+================================================
+
+--- Processes: 8 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 0.252408 seconds
+Maximum local computation time among processes: 0.122173 seconds
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.660167s
+
+Relative L2 error: 0.000000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.70x
+================================================
+
+==========================================
+Matrix Size: 4000x4000
+==========================================
+
+--- Processes: 1 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 17.6562 seconds
+Maximum local computation time among processes: 17.619 seconds
+
+--- Processes: 2 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 11.372 seconds
+Maximum local computation time among processes: 11.3338 seconds
+
+--- Processes: 4 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 9.09094 seconds
+Maximum local computation time among processes: 9.01732 seconds
+
+--- Processes: 8 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+
+Total execution time: 10.1447 seconds
+Maximum local computation time among processes: 9.85602 seconds
+
+--- Processes: 16 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+--------------------------------------------------------------------------
+mpirun was unable to launch the specified application as it could not access
+or execute an executable:
+
+Executable: ./mpi_program
+Node: 10.0.0.1
+
+while attempting to start process rank 8.
+--------------------------------------------------------------------------
+8 total processes failed to start
+

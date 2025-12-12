@@ -1,0 +1,141 @@
+=== Hybrid MPI+OpenMP Results ===
+Platform: Distributed Cluster
+Date: Fri Dec 12 17:54:57 +07 2025
+Using hostfile: true
+
+==========================================
+Matrix Size: 100x100
+==========================================
+
+--- Processes: 7, Threads: 1 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=100, Padded=128, Depth=4
+28672
+Strassen completed in 0.133023 seconds.
+Naive completed in 0.000125892 seconds.
+Relative L2 error: 6.50192e-07
+
+--- Processes: 7, Threads: 2 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=100, Padded=128, Depth=4
+28672
+Strassen completed in 0.163254 seconds.
+Naive completed in 8.6394e-05 seconds.
+Relative L2 error: 6.50192e-07
+
+--- Processes: 7, Threads: 4 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=100, Padded=128, Depth=4
+28672
+Strassen completed in 0.609867 seconds.
+Naive completed in 6.0607e-05 seconds.
+Relative L2 error: 6.50192e-07
+
+--- Processes: 7, Threads: 8 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=100, Padded=128, Depth=4
+28672
+Strassen completed in 239.778 seconds.
+Naive completed in 0.0185811 seconds.
+Relative L2 error: 6.50192e-07
+
+==========================================
+Matrix Size: 1000x1000
+==========================================
+
+--- Processes: 7, Threads: 1 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=1000, Padded=1024, Depth=4
+1835008
+Strassen completed in 0.179783 seconds.
+Naive completed in 0.148591 seconds.
+Relative L2 error: 1.33915e-06
+
+--- Processes: 7, Threads: 2 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=1000, Padded=1024, Depth=4
+1835008
+Strassen completed in 0.435721 seconds.
+Naive completed in 0.0777425 seconds.
+Relative L2 error: 1.33915e-06
+
+--- Processes: 7, Threads: 4 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=1000, Padded=1024, Depth=4
+1835008
+Strassen completed in 18.8602 seconds.
+Naive completed in 0.191566 seconds.
+Relative L2 error: 1.33915e-06
+
+--- Processes: 7, Threads: 8 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=1000, Padded=1024, Depth=4
+1835008
+Strassen completed in 200.497 seconds.
+Naive completed in 0.0504792 seconds.
+Relative L2 error: 1.33915e-06
+
+==========================================
+Matrix Size: 4000x4000
+==========================================
+
+--- Processes: 7, Threads: 1 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=4000, Padded=4096, Depth=4
+29360128
+Strassen completed in 7.33672 seconds.
+
+--- Processes: 7, Threads: 2 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=4000, Padded=4096, Depth=4
+29360128
+Strassen completed in 6.2119 seconds.
+
+--- Processes: 7, Threads: 4 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=4000, Padded=4096, Depth=4
+29360128
+Strassen completed in 65.4174 seconds.
+
+--- Processes: 7, Threads: 8 ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=4000, Padded=4096, Depth=4
+29360128
+Strassen completed in 161.198 seconds.
+

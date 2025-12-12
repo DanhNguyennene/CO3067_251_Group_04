@@ -1,0 +1,48 @@
+=== MPI Strassen Results ===
+Platform: Distributed Cluster
+Date: Fri Dec 12 17:54:34 +07 2025
+Using hostfile: true
+
+==========================================
+Matrix Size: 100x100
+==========================================
+
+--- Processes: 7 (required by Strassen algorithm) ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=100, Padded=128
+28672
+Strassen completed in 0.148638 seconds.
+Naive completed in 0.00018337 seconds.
+Relative L2 error: 2.30051e-07
+
+==========================================
+Matrix Size: 1000x1000
+==========================================
+
+--- Processes: 7 (required by Strassen algorithm) ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=1000, Padded=1024
+1835008
+Strassen completed in -1.86832 seconds.
+Naive completed in 0.171756 seconds.
+Relative L2 error: 8.97486e-07
+
+==========================================
+Matrix Size: 4000x4000
+==========================================
+
+--- Processes: 7 (required by Strassen algorithm) ---
+Authorization required, but no authorization protocol specified
+
+Authorization required, but no authorization protocol specified
+
+N=4000, Padded=4096
+29360128
+Strassen completed in 8.01379 seconds.
+
