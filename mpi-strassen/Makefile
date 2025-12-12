@@ -2,7 +2,7 @@
 # Parallel Computing Assignment 1
 
 CXX = mpicxx
-CXXFLAGS = -std=c++11 -O3 -Wall -Wextra
+CXXFLAGS = -std=c++11 -O3 -Wall -Wextra  -march=native 
 LDFLAGS = 
 
 # Target executable

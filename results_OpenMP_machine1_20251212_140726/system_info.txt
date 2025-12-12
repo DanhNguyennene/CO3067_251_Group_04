@@ -1,0 +1,9 @@
+=== SYSTEM INFORMATION ===
+Hostname: danhHomeBase
+Date: Fri Dec 12 02:07:26 PM +07 2025
+Kernel: 6.14.0-36-generic
+CPU: Intel(R) Core(TM) i5-14600K
+CPU Cores: 20
+Threads per core: 2
+Memory: 
+
