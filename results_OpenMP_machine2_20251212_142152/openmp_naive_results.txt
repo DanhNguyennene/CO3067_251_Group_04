@@ -1,0 +1,461 @@
+=== OpenMP Naive Results ===
+Machine: machine2
+Date: Fri Dec 12 14:21:54 +07 2025
+
+==========================================
+Matrix Size: 100x100
+==========================================
+
+--- Threads: 1 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 100x100
+Threads: 1
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 100 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 128
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 100x100 | Threads: 1 | Threshold: 128 | Time: 0.0001s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0001s
+
+Relative L2 error: 0.0000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 1.23x
+================================================
+
+--- Threads: 2 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 100x100
+Threads: 2
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 100 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 128
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 100x100 | Threads: 2 | Threshold: 128 | Time: 0.0002s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0001s
+
+Relative L2 error: 0.0000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.51x
+================================================
+
+--- Threads: 4 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 100x100
+Threads: 4
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 100 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 128
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 100x100 | Threads: 4 | Threshold: 128 | Time: 0.0004s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0001s
+
+Relative L2 error: 0.0000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.31x
+================================================
+
+--- Threads: 8 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 100x100
+Threads: 8
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 100 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 128
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 100x100 | Threads: 8 | Threshold: 128 | Time: 0.0140s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0002s
+
+Relative L2 error: 0.0000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.01x
+================================================
+
+--- Threads: 16 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 100x100
+Threads: 16
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 100 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 128
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 100x100 | Threads: 16 | Threshold: 128 | Time: 0.0014s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0001s
+
+Relative L2 error: 0.0000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.07x
+================================================
+
+==========================================
+Matrix Size: 1000x1000
+==========================================
+
+--- Threads: 1 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 1000x1000
+Threads: 1
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 1000 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 1024
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 1000x1000 | Threads: 1 | Threshold: 128 | Time: 0.1230s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.1224s
+
+Relative L2 error: 0.0000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 1.00x
+================================================
+
+--- Threads: 2 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 1000x1000
+Threads: 2
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 1000 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 1024
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 1000x1000 | Threads: 2 | Threshold: 128 | Time: 0.0712s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.1183s
+
+Relative L2 error: 0.0000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 1.66x
+================================================
+
+--- Threads: 4 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 1000x1000
+Threads: 4
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 1000 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 1024
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 1000x1000 | Threads: 4 | Threshold: 128 | Time: 0.0474s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.1310s
+
+Relative L2 error: 0.0000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 2.77x
+================================================
+
+--- Threads: 8 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 1000x1000
+Threads: 8
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 1000 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 1024
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 1000x1000 | Threads: 8 | Threshold: 128 | Time: 0.0698s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.1510s
+
+Relative L2 error: 0.0000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 2.16x
+================================================
+
+--- Threads: 16 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 1000x1000
+Threads: 16
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 1000 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 1024
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 1000x1000 | Threads: 16 | Threshold: 128 | Time: 0.0377s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.1321s
+
+Relative L2 error: 0.0000e+00
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 3.50x
+================================================
+
+==========================================
+Matrix Size: 10000x10000
+==========================================
+
+--- Threads: 1 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 10000x10000
+Threads: 1
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 10000 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 16384
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 10000x10000 | Threads: 1 | Threshold: 128 | Time: 149.0415s
+================================================
+
+--- Threads: 2 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 10000x10000
+Threads: 2
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 10000 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 16384
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 10000x10000 | Threads: 2 | Threshold: 128 | Time: 93.5300s
+================================================
+
+--- Threads: 4 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 10000x10000
+Threads: 4
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 10000 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 16384
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 10000x10000 | Threads: 4 | Threshold: 128 | Time: 76.8988s
+================================================
+
+--- Threads: 8 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 10000x10000
+Threads: 8
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 10000 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 16384
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 10000x10000 | Threads: 8 | Threshold: 128 | Time: 75.5792s
+================================================
+
+--- Threads: 16 ---
+
+================================================
+OpenMP Divide & Conquer Matrix Multiplication
+================================================
+Matrix size: 10000x10000
+Threads: 16
+Threshold: 128
+Max threads available: 8
+⚠ Warning: Size 10000 is not a power of 2.
+  Algorithm will fall back to naive multiplication for odd-sized blocks.
+  Nearest power of 2: 16384
+================================================
+
+Initializing matrices...
+Starting Parallel Divide & Conquer...
+
+================================================
+Results:
+================================================
+Size: 10000x10000 | Threads: 16 | Threshold: 128 | Time: 81.1862s
+================================================
+

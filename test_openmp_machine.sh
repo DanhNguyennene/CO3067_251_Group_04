@@ -28,7 +28,7 @@ echo "=============================================="
     echo "CPU: $(grep 'model name' /proc/cpuinfo | head -1 | cut -d: -f2 | sed 's/^[ \t]*//')"
     echo "CPU Cores: $(nproc)"
     echo "Threads per core: $(lscpu | grep 'Thread(s) per core' | awk '{print $4}')"
-    echo "Memory: $(grep MemTotal /proc/meminfo | awk '{printf \"%.2f GB\", $2/1024/1024}')"
+    echo "Memory: $(grep MemTotal /proc/meminfo | awk '{printf "%.2f GB", $2/1024/1024}')"
     echo ""
 } | tee "$OUTPUT_DIR/system_info.txt"
 

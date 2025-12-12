@@ -1,0 +1,9 @@
+=== SYSTEM INFORMATION ===
+Hostname: danhRemoteStation
+Date: Fri Dec 12 14:21:52 +07 2025
+Kernel: 6.6.87.2-microsoft-standard-WSL2
+CPU: 11th Gen Intel(R) Core(TM) i7-11370H @ 3.30GHz
+CPU Cores: 8
+Threads per core: 2
+Memory: 7.61 GB
+
