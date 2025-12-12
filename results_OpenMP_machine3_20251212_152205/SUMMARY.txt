@@ -1,0 +1,123 @@
+=== OPENMP BENCHMARK SUMMARY ===
+Machine: machine3
+Date: Fri Dec 12 15:31:23 +07 2025
+
+--- OpenMP Naive ---
+Matrix Size: 100x100
+--- Threads: 1 ---
+Threads: 1
+Size: 100x100 | Threads: 1 | Threshold: 128 | Time: 0.0001s
+✓ PASSED - Results are correct!
+--- Threads: 2 ---
+Threads: 2
+Size: 100x100 | Threads: 2 | Threshold: 128 | Time: 0.0003s
+✓ PASSED - Results are correct!
+--- Threads: 4 ---
+Threads: 4
+Size: 100x100 | Threads: 4 | Threshold: 128 | Time: 0.0009s
+✓ PASSED - Results are correct!
+--- Threads: 8 ---
+Threads: 8
+Size: 100x100 | Threads: 8 | Threshold: 128 | Time: 0.0004s
+✓ PASSED - Results are correct!
+--- Threads: 16 ---
+Threads: 16
+Size: 100x100 | Threads: 16 | Threshold: 128 | Time: 0.0017s
+✓ PASSED - Results are correct!
+Matrix Size: 1000x1000
+--- Threads: 1 ---
+Threads: 1
+Size: 1000x1000 | Threads: 1 | Threshold: 128 | Time: 0.0761s
+✓ PASSED - Results are correct!
+--- Threads: 2 ---
+Threads: 2
+Size: 1000x1000 | Threads: 2 | Threshold: 128 | Time: 0.0576s
+✓ PASSED - Results are correct!
+--- Threads: 4 ---
+Threads: 4
+Size: 1000x1000 | Threads: 4 | Threshold: 128 | Time: 0.0338s
+✓ PASSED - Results are correct!
+--- Threads: 8 ---
+Threads: 8
+Size: 1000x1000 | Threads: 8 | Threshold: 128 | Time: 0.0273s
+✓ PASSED - Results are correct!
+--- Threads: 16 ---
+Threads: 16
+Size: 1000x1000 | Threads: 16 | Threshold: 128 | Time: 0.0237s
+✓ PASSED - Results are correct!
+Matrix Size: 10000x10000
+--- Threads: 1 ---
+Threads: 1
+Size: 10000x10000 | Threads: 1 | Threshold: 128 | Time: 97.1157s
+--- Threads: 2 ---
+Threads: 2
+Size: 10000x10000 | Threads: 2 | Threshold: 128 | Time: 70.1387s
+--- Threads: 4 ---
+Threads: 4
+Size: 10000x10000 | Threads: 4 | Threshold: 128 | Time: 73.1689s
+--- Threads: 8 ---
+Threads: 8
+Size: 10000x10000 | Threads: 8 | Threshold: 128 | Time: 82.2075s
+--- Threads: 16 ---
+Threads: 16
+Size: 10000x10000 | Threads: 16 | Threshold: 128 | Time: 81.3105s
+
+--- OpenMP Strassen ---
+Matrix Size: 100x100
+--- Threads: 1 ---
+Threads: 1
+Size: 100x100 (padded to 128x128) | Threads: 1 | Threshold: 128 | Max Depth: 4 | Time: 0.0055s
+✓ PASSED - Results are correct!
+--- Threads: 2 ---
+Threads: 2
+Size: 100x100 (padded to 128x128) | Threads: 2 | Threshold: 128 | Max Depth: 4 | Time: 0.0051s
+✓ PASSED - Results are correct!
+--- Threads: 4 ---
+Threads: 4
+Size: 100x100 (padded to 128x128) | Threads: 4 | Threshold: 128 | Max Depth: 4 | Time: 0.0038s
+✓ PASSED - Results are correct!
+--- Threads: 8 ---
+Threads: 8
+Size: 100x100 (padded to 128x128) | Threads: 8 | Threshold: 128 | Max Depth: 4 | Time: 0.0039s
+✓ PASSED - Results are correct!
+--- Threads: 16 ---
+Threads: 16
+Size: 100x100 (padded to 128x128) | Threads: 16 | Threshold: 128 | Max Depth: 4 | Time: 0.0066s
+✓ PASSED - Results are correct!
+Matrix Size: 1000x1000
+--- Threads: 1 ---
+Threads: 1
+Size: 1000x1000 (padded to 1024x1024) | Threads: 1 | Threshold: 128 | Max Depth: 4 | Time: 0.0823s
+✓ PASSED - Results are correct!
+--- Threads: 2 ---
+Threads: 2
+Size: 1000x1000 (padded to 1024x1024) | Threads: 2 | Threshold: 128 | Max Depth: 4 | Time: 0.0507s
+✓ PASSED - Results are correct!
+--- Threads: 4 ---
+Threads: 4
+Size: 1000x1000 (padded to 1024x1024) | Threads: 4 | Threshold: 128 | Max Depth: 4 | Time: 0.0434s
+✓ PASSED - Results are correct!
+--- Threads: 8 ---
+Threads: 8
+Size: 1000x1000 (padded to 1024x1024) | Threads: 8 | Threshold: 128 | Max Depth: 4 | Time: 0.0319s
+✓ PASSED - Results are correct!
+--- Threads: 16 ---
+Threads: 16
+Size: 1000x1000 (padded to 1024x1024) | Threads: 16 | Threshold: 128 | Max Depth: 4 | Time: 0.0378s
+✓ PASSED - Results are correct!
+Matrix Size: 10000x10000
+--- Threads: 1 ---
+Threads: 1
+Size: 10000x10000 (padded to 10112x10112) | Threads: 1 | Threshold: 128 | Max Depth: 4 | Time: 42.3458s
+--- Threads: 2 ---
+Threads: 2
+Size: 10000x10000 (padded to 10112x10112) | Threads: 2 | Threshold: 128 | Max Depth: 4 | Time: 33.3096s
+--- Threads: 4 ---
+Threads: 4
+Size: 10000x10000 (padded to 10112x10112) | Threads: 4 | Threshold: 128 | Max Depth: 4 | Time: 24.5504s
+--- Threads: 8 ---
+Threads: 8
+Size: 10000x10000 (padded to 10112x10112) | Threads: 8 | Threshold: 128 | Max Depth: 4 | Time: 19.9771s
+--- Threads: 16 ---
+Threads: 16
+Size: 10000x10000 (padded to 10112x10112) | Threads: 16 | Threshold: 128 | Max Depth: 4 | Time: 17.5197s

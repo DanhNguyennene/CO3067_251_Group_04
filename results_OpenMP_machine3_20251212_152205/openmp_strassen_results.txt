@@ -1,0 +1,501 @@
+=== OpenMP Strassen Results ===
+Machine: machine3
+Date: Fri Dec 12 15:28:59 +07 2025
+
+==========================================
+Matrix Size: 100x100
+==========================================
+
+--- Threads: 1 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 100x100
+Threads: 1
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 100x100 to 128x128
+ℹ Info: Size 100 is not a power of 2.
+  Nearest power of 2: 128
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 100x100 (padded to 128x128) | Threads: 1 | Threshold: 128 | Max Depth: 4 | Time: 0.0055s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0002s
+
+Relative L2 error: 4.3563e-07
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.04x
+================================================
+
+--- Threads: 2 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 100x100
+Threads: 2
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 100x100 to 128x128
+ℹ Info: Size 100 is not a power of 2.
+  Nearest power of 2: 128
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 100x100 (padded to 128x128) | Threads: 2 | Threshold: 128 | Max Depth: 4 | Time: 0.0051s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0002s
+
+Relative L2 error: 4.3563e-07
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.04x
+================================================
+
+--- Threads: 4 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 100x100
+Threads: 4
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 100x100 to 128x128
+ℹ Info: Size 100 is not a power of 2.
+  Nearest power of 2: 128
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 100x100 (padded to 128x128) | Threads: 4 | Threshold: 128 | Max Depth: 4 | Time: 0.0038s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0002s
+
+Relative L2 error: 4.3563e-07
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.05x
+================================================
+
+--- Threads: 8 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 100x100
+Threads: 8
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 100x100 to 128x128
+ℹ Info: Size 100 is not a power of 2.
+  Nearest power of 2: 128
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 100x100 (padded to 128x128) | Threads: 8 | Threshold: 128 | Max Depth: 4 | Time: 0.0039s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0001s
+
+Relative L2 error: 4.3563e-07
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.03x
+================================================
+
+--- Threads: 16 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 100x100
+Threads: 16
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 100x100 to 128x128
+ℹ Info: Size 100 is not a power of 2.
+  Nearest power of 2: 128
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 100x100 (padded to 128x128) | Threads: 16 | Threshold: 128 | Max Depth: 4 | Time: 0.0066s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0003s
+
+Relative L2 error: 4.3563e-07
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 0.05x
+================================================
+
+==========================================
+Matrix Size: 1000x1000
+==========================================
+
+--- Threads: 1 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 1000x1000
+Threads: 1
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 1000x1000 to 1024x1024
+ℹ Info: Size 1000 is not a power of 2.
+  Nearest power of 2: 1024
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 1000x1000 (padded to 1024x1024) | Threads: 1 | Threshold: 128 | Max Depth: 4 | Time: 0.0823s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0875s
+  Error at (0,1): got 251.8467, expected 251.8454, diff=0.0013
+  Error at (0,2): got 246.9793, expected 246.9781, diff=0.0012
+  Error at (0,6): got 243.5141, expected 243.5152, diff=0.0010
+  Error at (0,22): got 244.4291, expected 244.4303, diff=0.0013
+  Error at (0,33): got 236.0285, expected 236.0304, diff=0.0018
+
+Relative L2 error: 1.0880e-06
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 1.06x
+================================================
+
+--- Threads: 2 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 1000x1000
+Threads: 2
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 1000x1000 to 1024x1024
+ℹ Info: Size 1000 is not a power of 2.
+  Nearest power of 2: 1024
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 1000x1000 (padded to 1024x1024) | Threads: 2 | Threshold: 128 | Max Depth: 4 | Time: 0.0507s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0731s
+  Error at (0,1): got 251.8467, expected 251.8454, diff=0.0013
+  Error at (0,2): got 246.9793, expected 246.9781, diff=0.0012
+  Error at (0,6): got 243.5141, expected 243.5152, diff=0.0010
+  Error at (0,22): got 244.4291, expected 244.4303, diff=0.0013
+  Error at (0,33): got 236.0285, expected 236.0304, diff=0.0018
+
+Relative L2 error: 1.0880e-06
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 1.44x
+================================================
+
+--- Threads: 4 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 1000x1000
+Threads: 4
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 1000x1000 to 1024x1024
+ℹ Info: Size 1000 is not a power of 2.
+  Nearest power of 2: 1024
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 1000x1000 (padded to 1024x1024) | Threads: 4 | Threshold: 128 | Max Depth: 4 | Time: 0.0434s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0820s
+  Error at (0,1): got 251.8467, expected 251.8454, diff=0.0013
+  Error at (0,2): got 246.9793, expected 246.9781, diff=0.0012
+  Error at (0,6): got 243.5141, expected 243.5152, diff=0.0010
+  Error at (0,22): got 244.4291, expected 244.4303, diff=0.0013
+  Error at (0,33): got 236.0285, expected 236.0304, diff=0.0018
+
+Relative L2 error: 1.0880e-06
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 1.89x
+================================================
+
+--- Threads: 8 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 1000x1000
+Threads: 8
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 1000x1000 to 1024x1024
+ℹ Info: Size 1000 is not a power of 2.
+  Nearest power of 2: 1024
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 1000x1000 (padded to 1024x1024) | Threads: 8 | Threshold: 128 | Max Depth: 4 | Time: 0.0319s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0926s
+  Error at (0,1): got 251.8467, expected 251.8454, diff=0.0013
+  Error at (0,2): got 246.9793, expected 246.9781, diff=0.0012
+  Error at (0,6): got 243.5141, expected 243.5152, diff=0.0010
+  Error at (0,22): got 244.4291, expected 244.4303, diff=0.0013
+  Error at (0,33): got 236.0285, expected 236.0304, diff=0.0018
+
+Relative L2 error: 1.0880e-06
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 2.90x
+================================================
+
+--- Threads: 16 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 1000x1000
+Threads: 16
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 1000x1000 to 1024x1024
+ℹ Info: Size 1000 is not a power of 2.
+  Nearest power of 2: 1024
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 1000x1000 (padded to 1024x1024) | Threads: 16 | Threshold: 128 | Max Depth: 4 | Time: 0.0378s
+
+================================================
+Verifying Correctness...
+================================================
+Serial verification time: 0.0786s
+  Error at (0,1): got 251.8467, expected 251.8454, diff=0.0013
+  Error at (0,2): got 246.9793, expected 246.9781, diff=0.0012
+  Error at (0,6): got 243.5141, expected 243.5152, diff=0.0010
+  Error at (0,22): got 244.4291, expected 244.4303, diff=0.0013
+  Error at (0,33): got 236.0285, expected 236.0304, diff=0.0018
+
+Relative L2 error: 1.0880e-06
+✓ PASSED - Results are correct!
+
+Speedup vs Serial: 2.08x
+================================================
+
+==========================================
+Matrix Size: 10000x10000
+==========================================
+
+--- Threads: 1 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 10000x10000
+Threads: 1
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 10000x10000 to 10112x10112
+ℹ Info: Size 10000 is not a power of 2.
+  Nearest power of 2: 16384
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 10000x10000 (padded to 10112x10112) | Threads: 1 | Threshold: 128 | Max Depth: 4 | Time: 42.3458s
+================================================
+
+--- Threads: 2 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 10000x10000
+Threads: 2
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 10000x10000 to 10112x10112
+ℹ Info: Size 10000 is not a power of 2.
+  Nearest power of 2: 16384
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 10000x10000 (padded to 10112x10112) | Threads: 2 | Threshold: 128 | Max Depth: 4 | Time: 33.3096s
+================================================
+
+--- Threads: 4 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 10000x10000
+Threads: 4
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 10000x10000 to 10112x10112
+ℹ Info: Size 10000 is not a power of 2.
+  Nearest power of 2: 16384
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 10000x10000 (padded to 10112x10112) | Threads: 4 | Threshold: 128 | Max Depth: 4 | Time: 24.5504s
+================================================
+
+--- Threads: 8 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 10000x10000
+Threads: 8
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 10000x10000 to 10112x10112
+ℹ Info: Size 10000 is not a power of 2.
+  Nearest power of 2: 16384
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 10000x10000 (padded to 10112x10112) | Threads: 8 | Threshold: 128 | Max Depth: 4 | Time: 19.9771s
+================================================
+
+--- Threads: 16 ---
+
+================================================
+OpenMP Strassen Matrix Multiplication
+================================================
+Matrix size: 10000x10000
+Threads: 16
+Threshold: 128
+Max parallel depth: 4
+Max threads available: 14
+⚠ Warning: Matrix will be padded from 10000x10000 to 10112x10112
+ℹ Info: Size 10000 is not a power of 2.
+  Nearest power of 2: 16384
+================================================
+
+Initializing matrices...
+Starting Strassen Algorithm...
+
+================================================
+Results:
+================================================
+Size: 10000x10000 (padded to 10112x10112) | Threads: 16 | Threshold: 128 | Max Depth: 4 | Time: 17.5197s
+================================================
+

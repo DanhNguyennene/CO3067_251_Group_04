@@ -1,0 +1,9 @@
+=== SYSTEM INFORMATION ===
+Hostname: soc-FSNQ444
+Date: Fri Dec 12 15:22:05 +07 2025
+Kernel: 6.6.87.2-microsoft-standard-WSL2
+CPU: Intel(R) Core(TM) Ultra 7 165U
+CPU Cores: 14
+Threads per core: 2
+Memory: 15.19 GB
+
