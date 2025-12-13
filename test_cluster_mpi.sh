@@ -93,7 +93,7 @@ if [ -f ./mpi_program ]; then
         echo "=== MPI Naive ==="
         for size in 100 1000 4000; do
             echo "Size: ${size}x${size}"
-            for procs in 1 2 4 8 16; do
+            for procs in 1 2 4 8; do
                 if [ $((size % procs)) -eq 0 ]; then
                     echo "Procs: $procs"
                     if [ $size -le 1000 ]; then

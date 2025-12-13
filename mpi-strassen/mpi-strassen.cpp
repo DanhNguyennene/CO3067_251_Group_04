@@ -184,14 +184,14 @@ void strassen_mpi_wrapper(
 
     std::vector<float> scatterBuf(totalSend, 0.0f);
 
-    const float *A11;
-    const float *A12;
-    const float *A21;
-    const float *A22;
-    const float *B11;
-    const float *B12;
-    const float *B21;
-    const float *B22;
+    const float *A11 = nullptr;
+    const float *A12 = nullptr;
+    const float *A21 = nullptr;
+    const float *A22 = nullptr;
+    const float *B11 = nullptr;
+    const float *B12 = nullptr;
+    const float *B21 = nullptr;
+    const float *B22 = nullptr;
 
     if (rank == 0)
     {
