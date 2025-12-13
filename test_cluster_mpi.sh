@@ -120,23 +120,16 @@ compile_on_all_nodes "mpi-naive"
 if [ -f ./mpi_program ]; then
     {
         echo "=== MPI Naive ==="
-        # Quick tests with reasonable sizes
-        for size in 1000 4000 8000; do
+        # Test with larger process counts only
+        for size in 2000 5000 10000; do
             echo "Size: ${size}x${size}"
-            # Test with 2, 4, 8, 10 processes to use all nodes
-            for procs in 2 4 8 10; do
+            # Use 10, 20, 30, 40 processes (10 nodes × 4 cores)
+            for procs in 10 20 30 40; do
                 if [ $((size % procs)) -eq 0 ]; then
                     echo "Procs: $procs"
-                    # No verification for large matrices to save time
                     mpirun $MPI_OPTS -np $procs ./mpi_program $size 0
                 fi
             done
-        done
-        echo ""
-        echo "=== Scalability Test (10000x10000) ==="
-        for procs in 1 2 4 8 10 20 40; do
-            echo "Procs: $procs"
-            mpirun $MPI_OPTS -np $procs ./mpi_program 10000 0
         done
     } 2>&1 | tee "$OUTPUT_DIR/mpi_naive_results.txt"
 fi
@@ -164,23 +157,17 @@ compile_on_all_nodes "hybrid-strassen"
 if [ -f ./main ]; then
     {
         echo "=== Hybrid MPI+OpenMP ==="
-        # Test different thread counts with 7 MPI processes
-        for size in 2048 8192; do
+        # Use 10-20 MPI processes with multiple threads
+        for size in 4096 10240; do
             echo "Size: ${size}x${size}"
-            for threads in 2 4; do
-                echo "Procs: 7, Threads: $threads (Total: $((7*threads)) workers)"
-                export OMP_NUM_THREADS=$threads
-                mpirun $MPI_OPTS -np 7 -x OMP_NUM_THREADS=$threads ./main $size 0 $threads 128
+            # 10 processes × 4 threads = 40 workers
+            for procs in 10 20; do
+                for threads in 2 4; do
+                    echo "Procs: $procs, Threads: $threads (Total: $((procs*threads)) workers)"
+                    export OMP_NUM_THREADS=$threads
+                    mpirun $MPI_OPTS -np $procs -x OMP_NUM_THREADS=$threads ./main $size 0 $threads 128
+                done
             done
-        done
-        
-        echo ""
-        echo "=== Scalability Test (10240x10240) ==="
-        # Fixed 7 processes, vary threads to utilize all CPU cores
-        for threads in 1 2 4 8; do
-            echo "Procs: 7, Threads: $threads (Total: $((7*threads)) workers)"
-            export OMP_NUM_THREADS=$threads
-            mpirun $MPI_OPTS -np 7 -x OMP_NUM_THREADS=$threads ./main 10240 0 $threads 128
         done
     } 2>&1 | tee "$OUTPUT_DIR/hybrid_strassen_results.txt"
 fi
