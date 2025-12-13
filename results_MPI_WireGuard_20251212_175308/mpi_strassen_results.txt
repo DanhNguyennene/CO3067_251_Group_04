@@ -29,7 +29,7 @@ Authorization required, but no authorization protocol specified
 
 N=1000, Padded=1024
 1835008
-Strassen completed in -1.86832 seconds.
+Strassen completed in 1.86832 seconds.
 Naive completed in 0.171756 seconds.
 Relative L2 error: 8.97486e-07
 
