@@ -28,8 +28,8 @@ fi
 cd "$BASE_DIR"
 git pull origin main 2>/dev/null || true
 
-if [ ! -f "$HOSTFILE" ]; then
-    cat > "$HOSTFILE" << 'EOF'
+# Always regenerate hostfile with correct format for MPICH
+cat > "$HOSTFILE" << 'EOF'
 MPI-node1:4
 MPI-node2:4
 MPI-node3:4
@@ -41,7 +41,6 @@ MPI-node9:4
 MPI-node10:4
 MPI-node11:4
 EOF
-fi
 
 NODES=$(grep -oE 'MPI-node[0-9]+' "$HOSTFILE" | sort -u)
 NODE_COUNT=$(echo "$NODES" | wc -w)
