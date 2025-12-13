@@ -777,6 +777,30 @@ C[i,j] = \sum_{k=0}^{N-1} A[i,k] \cdot B[k,j]
     \item Work group size: 16×16 threads
 \end{itemize}
 
+\begin{lstlisting}[language=C]
+// Naive GPU matrix multiplication
+#version 430
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout(std430, binding = 0) readonly buffer MatA { float A[]; };
+layout(std430, binding = 1) readonly buffer MatB { float B[]; };
+layout(std430, binding = 2) writeonly buffer MatC { float C[]; };
+
+uniform int N;
+
+void main() {
+    uint row = gl_GlobalInvocationID.y;
+    uint col = gl_GlobalInvocationID.x;
+    if (row >= uint(N) || col >= uint(N)) return;
+
+    float sum = 0.0;
+    for(uint k=0u; k<uint(N); ++k){
+        sum += A[row*N + k]*B[k*N + col];
+    }
+    C[row*N + col] = sum;
+}
+\end{lstlisting}
+
 \textbf{Performance Characteristics:}
 \begin{itemize}
     \item \textbf{Pros:}
@@ -810,6 +834,52 @@ C[i,j] = \sum_{t=0}^{\lceil N/TILE \rceil - 1} \sum_{k=0}^{TILE-1} A_{tile}[i,k]
     \item \textbf{Computation:} Inner loop accesses only shared memory: \texttt{sum += Asub[ly][k] * Bsub[k][lx]}
     \item \textbf{Iteration:} Outer loop iterates over $\lceil N/16 \rceil$ tiles
 \end{itemize}
+
+\begin{lstlisting}[language=C]
+// Tiled GPU matrix multiplication with shared memory
+#version 430
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout(std430, binding = 0) readonly buffer MatA { float A[]; };
+layout(std430, binding = 1) readonly buffer MatB { float B[]; };
+layout(std430, binding = 2) writeonly buffer MatC { float C[]; };
+
+uniform int N;
+uniform int stride;
+uniform int baseRow;
+
+shared float Asub[16][16];
+shared float Bsub[16][16];
+
+void main() {
+    uint lx = gl_LocalInvocationID.x;
+    uint ly = gl_LocalInvocationID.y;
+    uint col = gl_GlobalInvocationID.x;
+    uint row = uint(baseRow) + gl_GlobalInvocationID.y;
+
+    if(row >= uint(N) || col >= uint(N)) return;
+
+    const uint TILE = 16u;
+    float sum = 0.0;
+    uint numTiles = (uint(N) + TILE - 1u) / TILE;
+
+    for(uint t=0u; t<numTiles; ++t){
+        uint aCol = t*TILE + lx;
+        uint bRow = t*TILE + ly;
+        Asub[ly][lx] = (aCol < uint(N)) ? A[row*stride + aCol] : 0.0;
+        Bsub[ly][lx] = (bRow < uint(N)) ? B[bRow*stride + col] : 0.0;
+
+        memoryBarrierShared();
+        barrier();
+
+        for(uint k=0u; k<TILE; ++k){
+            sum += Asub[ly][k]*Bsub[k][lx];
+        }
+        barrier();
+    }
+    C[row*stride + col] = sum;
+}
+\end{lstlisting}
 
 \textbf{Performance Characteristics:}
 \begin{itemize}
@@ -875,6 +945,57 @@ Unlike the recursive CPU implementation, the GPU shader uses a \textit{single-le
     \item \textbf{Parallelism:} GPU exploits fine-grained thread parallelism, CPU uses coarse-grained MPI/OpenMP
     \item \textbf{Optimization:} GPU combines tiling with Strassen, CPU uses threshold switching to naive
 \end{enumerate}
+
+\begin{lstlisting}[language=C]
+// GPU Strassen matrix multiplication (single-level)
+#version 430
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout(std430, binding = 0) readonly buffer MatA { float A[]; };
+layout(std430, binding = 1) readonly buffer MatB { float B[]; };
+layout(std430, binding = 2) writeonly buffer MatC { float C[]; };
+
+uniform int N;          
+uniform int stride;     
+uniform int offsetA;    
+uniform int offsetB;    
+uniform int sign;       
+
+shared float Asub[16][16];
+shared float Bsub[16][16];
+
+void main() {
+    uint lx = gl_LocalInvocationID.x;
+    uint ly = gl_LocalInvocationID.y;
+    uint col = gl_GlobalInvocationID.x;
+    uint row = gl_GlobalInvocationID.y;
+    
+    if(row >= uint(N) || col >= uint(N)) return;
+    
+    const uint TILE = 16u;
+    float sum = 0.0;
+    uint numTiles = (uint(N) + TILE - 1u) / TILE;
+    
+    for(uint t = 0u; t < numTiles; ++t) {
+        uint aCol = t * TILE + lx;
+        uint bRow = t * TILE + ly;
+        
+        // Load tiles with optional offset and sign for Strassen operations
+        Asub[ly][lx] = (aCol < uint(N)) ? A[offsetA + row * stride + aCol] : 0.0;
+        Bsub[ly][lx] = (bRow < uint(N)) ? B[offsetB + bRow * stride + col] : 0.0;
+        
+        memoryBarrierShared();
+        barrier();
+        
+        for(uint k = 0u; k < TILE; ++k) {
+            sum += Asub[ly][k] * Bsub[k][lx];
+        }
+        barrier();
+    }
+    
+    C[row * stride + col] = sum;
+}
+\end{lstlisting}
 
 \textbf{Performance Characteristics:}
 \begin{itemize}
