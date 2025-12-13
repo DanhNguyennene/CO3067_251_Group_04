@@ -48,20 +48,43 @@ fi
 NODES=$(grep -oE 'MPI-node[0-9]+' "$HOSTFILE" | sort -u)
 NODE_COUNT=$(echo "$NODES" | wc -w)
 
+CURRENT_HOST=$(hostname)
 REACHABLE_NODES=""
+
 for node in $NODES; do
-    if ssh -o BatchMode=yes -o ConnectTimeout=5 "$node" "echo OK" 2>/dev/null >/dev/null; then
-        REACHABLE_NODES="$REACHABLE_NODES $node"
+    if [ "$node" == "$CURRENT_HOST" ]; then
+        REACHABLE_NODES="$node"
+        break
+    fi
+done
+
+for node in $NODES; do
+    if [ "$node" != "$CURRENT_HOST" ]; then
+        if ssh -o BatchMode=yes -o ConnectTimeout=5 "$node" "echo OK" 2>/dev/null >/dev/null; then
+            REACHABLE_NODES="$REACHABLE_NODES $node"
+        fi
     fi
 done
 
 REACHABLE_COUNT=$(echo $REACHABLE_NODES | wc -w)
 if [ "$REACHABLE_COUNT" -eq 0 ]; then
+    # No nodes reachable at all - shouldn't happen but fallback to localhost
     USE_HOSTFILE=false
-    MPI_OPTS=""
+    cat > "$HOSTFILE" << 'EOF'
+localhost slots=4
+EOF
+    MPI_OPTS="--hostfile $HOSTFILE"
+    echo "Warning: No nodes reachable. Running on localhost only."
+elif [ "$REACHABLE_COUNT" -eq 1 ] && [ "$REACHABLE_NODES" == "$CURRENT_HOST" ]; then
+    # Only current node, no other nodes reachable
+    USE_HOSTFILE=false
+    echo "Warning: Running on single node ($CURRENT_HOST) only."
+    MPI_OPTS="--hostfile $HOSTFILE"
 else
+    # Multiple nodes reachable
     USE_HOSTFILE=true
     MPI_OPTS="--hostfile $HOSTFILE"
+    echo "Running on $REACHABLE_COUNT nodes: $REACHABLE_NODES"
 fi
 
 if [ "$USE_HOSTFILE" = true ]; then
