@@ -1,4 +1,0 @@
-Hostname: danhHomeBase
-Date: Sat Dec 13 12:27:06 PM +07 2025
-CPU: Intel(R) Core(TM) i5-14600K
-Cores: 20
