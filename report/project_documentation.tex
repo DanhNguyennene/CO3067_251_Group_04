@@ -1250,10 +1250,64 @@ This section presents comprehensive benchmark results from testing all implement
 \begin{itemize}
     \item \textbf{Cluster}: HPCC (High-Performance Computing Cluster)
     \item \textbf{Nodes}: 10 nodes (all reachable)
+    \item \textbf{Node Specifications}: Intel Xeon E5-2680 v3 @ 2.50GHz
+    \item \textbf{Cores per Node}: 8 cores (1 socket, 1 thread per core)
+    \item \textbf{Memory per Node}: 16 GB RAM (15.6 GB available)
+    \item \textbf{Swap}: None (0 GB)
     \item \textbf{Interconnect}: High-speed network
     \item \textbf{Test Date}: December 13, 2025 (09:07-09:08 UTC)
-    \item \textbf{Head Node}: MPI-node1
 \end{itemize}
+
+\subsubsection{Memory Constraints Analysis}
+
+\textbf{Distributed vs Shared Memory Architecture:}
+
+The fundamental difference between MPI (distributed memory) and OpenMP (shared memory) directly impacts maximum matrix sizes:
+
+\begin{table}[H]
+\centering
+\caption{Memory Requirements: MPI vs OpenMP}
+\label{tab:memory_comparison}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Matrix Size} & \textbf{Per Matrix} & \textbf{Total (3 matrices)} & \textbf{MPI (8 procs)} & \textbf{OpenMP (8 threads)} \\ \midrule
+960×960     & 7 MB    & 21 MB   & 168 MB   & 21 MB \\
+3072×3072   & 72 MB   & 216 MB  & 1.7 GB   & 216 MB \\
+5000×5000   & 191 MB  & 573 MB  & 4.6 GB   & 573 MB \\
+10000×10000 & 763 MB  & 2.3 GB  & 18.4 GB  & 2.3 GB \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Why 10000×10000 Fails on MPI Cluster:}
+
+\begin{itemize}
+    \item \textbf{MPI Distributed Memory Model}: Each process maintains its own complete copy of matrices A, B, and C
+    \item \textbf{Memory per Process}: 10000×10000×8 bytes (double) × 3 matrices = 2.3 GB per process
+    \item \textbf{Total Memory Required}: 2.3 GB × 8 processes = \textbf{18.4 GB}
+    \item \textbf{Cluster Limitation}: Each node has only 16 GB RAM, shared among processes
+    \item \textbf{Result}: Memory exhaustion when 8 processes distributed across nodes exceed per-node limits
+\end{itemize}
+
+\textbf{Why 10000×10000 Works on OpenMP:}
+
+\begin{itemize}
+    \item \textbf{OpenMP Shared Memory Model}: All threads share the same physical memory space
+    \item \textbf{Single Copy}: Only ONE copy of matrices A, B, C exists in memory
+    \item \textbf{Total Memory Required}: 2.3 GB total (not per thread)
+    \item \textbf{Machine 1 Capacity}: System has sufficient RAM ($>$16 GB) for single 2.3 GB allocation
+    \item \textbf{Result}: Successfully executes in 7.72s with 16 threads
+\end{itemize}
+
+\textbf{Practical Implications:}
+
+\begin{enumerate}
+    \item \textbf{Matrix Size Selection}: MPI cluster tests limited to 5000×5000 (4.6 GB across 8 processes)
+    \item \textbf{Per-Node Memory Budget}: With 16 GB RAM per node, maximum safe size is $\approx$5000×5000
+    \item \textbf{Scalability Trade-off}: MPI achieves distributed parallelism but requires $N \times$ more memory than OpenMP for $N$ processes
+    \item \textbf{Hybrid Approach}: Combining MPI+OpenMP can reduce memory footprint by using shared memory within nodes and distributed memory across nodes
+\end{enumerate}
+
+This memory analysis explains why our MPI tests focus on medium-sized matrices (960×960 to 5000×5000) while OpenMP successfully handles 10000×10000. The architecture fundamentally determines feasible problem sizes.
 
 \subsubsection{MPI Naive Performance}
 
