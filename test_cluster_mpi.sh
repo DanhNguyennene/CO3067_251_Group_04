@@ -121,27 +121,30 @@ compile_on_all_nodes "mpi-naive"
 if [ -f ./mpi_program ]; then
     {
         echo "=== MPI Naive ==="
+        echo "Note: Matrix size must be divisible by number of processes"
+        echo ""
+        
         echo "Small matrix tests with varying process counts:"
-        echo "Size: 1000x1000 (with verification)"
+        echo "Size: 960x960 (divisible by 4,8,16,24) - with verification"
         for procs in 4 8 16 24; do
             echo "Procs: $procs"
-            mpirun $MPI_OPTS -np $procs ./mpi_program 1000 1
+            mpirun $MPI_OPTS -np $procs ./mpi_program 960 1
         done
         
         echo ""
-        echo "Medium matrix:"
-        echo "Size: 5000x5000"
+        echo "Medium matrix tests:"
+        echo "Size: 4800x4800 (divisible by 24,48,96)"
         for procs in 24 48 96; do
             echo "Procs: $procs"
-            mpirun $MPI_OPTS -np $procs ./mpi_program 5000 0
+            mpirun $MPI_OPTS -np $procs ./mpi_program 4800 0
         done
         
         echo ""
         echo "Large matrix - maximum utilization:"
-        echo "Size: 10000x10000"
+        echo "Size: 9600x9600 (divisible by 96,144,192,240)"
         for procs in 96 144 192 240; do
             echo "Procs: $procs"
-            mpirun $MPI_OPTS -np $procs ./mpi_program 10000 0
+            mpirun $MPI_OPTS -np $procs ./mpi_program 9600 0
         done
     } 2>&1 | tee "$OUTPUT_DIR/mpi_naive_results.txt"
 fi
@@ -153,9 +156,25 @@ compile_on_all_nodes "mpi-strassen"
 if [ -f ./mpi_program ]; then
     {
         echo "=== MPI Strassen ==="
-        echo "Size: 1024x1024, Procs: 7 (verify)"
+        echo "Note: MPI Strassen requires exactly 7 processes"
+        echo ""
+        
+        echo "Small matrix (with verification):"
+        echo "Size: 1024x1024, Procs: 7"
         mpirun $MPI_OPTS -np 7 ./mpi_program 1024 1
         
+        echo ""
+        echo "Medium matrix:"
+        echo "Size: 2048x2048, Procs: 7"
+        mpirun $MPI_OPTS -np 7 ./mpi_program 2048 0
+        
+        echo ""
+        echo "Large matrix:"
+        echo "Size: 4096x4096, Procs: 7"
+        mpirun $MPI_OPTS -np 7 ./mpi_program 4096 0
+        
+        echo ""
+        echo "Extra large matrix:"
         echo "Size: 8192x8192, Procs: 7"
         mpirun $MPI_OPTS -np 7 ./mpi_program 8192 0
     } 2>&1 | tee "$OUTPUT_DIR/mpi_strassen_results.txt"
@@ -168,14 +187,34 @@ compile_on_all_nodes "hybrid-strassen"
 if [ -f ./main ]; then
     {
         echo "=== Hybrid MPI+OpenMP ==="
-        echo "Size: 2048x2048, Procs: 7, Threads: 3 (verify)"
+        echo "Note: Hybrid uses 7 MPI processes with OpenMP threads per process"
+        echo ""
+        
+        echo "Small matrix (with verification):"
+        echo "Size: 2048x2048, MPI Procs: 7, OpenMP Threads: 3"
         mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 3 ./main 2048 1 3 128
         
-        echo "Size: 8192x8192, Procs: 7, Threads: 12"
+        echo ""
+        echo "Medium matrix with moderate threading:"
+        echo "Size: 4096x4096, MPI Procs: 7, OpenMP Threads: 8"
+        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 8 ./main 4096 0 8 128
+        
+        echo ""
+        echo "Large matrix with moderate threading:"
+        echo "Size: 8192x8192, MPI Procs: 7, OpenMP Threads: 12"
         mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 12 ./main 8192 0 12 128
         
-        echo "Size: 8192x8192, Procs: 7, Threads: 24"
+        echo ""
+        echo "Large matrix with maximum threading:"
+        echo "Size: 8192x8192, MPI Procs: 7, OpenMP Threads: 24"
         mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 24 ./main 8192 0 24 128
+        
+        echo ""
+        echo "Extra large matrix with maximum threading:"
+        echo "Size: 12288x12288, MPI Procs: 7, OpenMP Threads: 24"
+        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 24 ./main 12288 0 24 128
+    } 2>&1 | tee "$OUTPUT_DIR/hybrid_strassen_results.txt"
+fi
         
         echo "Size: 10240x10240, Procs: 7, Threads: 12"
         mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 12 ./main 10240 0 12 128
