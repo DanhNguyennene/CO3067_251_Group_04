@@ -29,17 +29,18 @@ cd "$BASE_DIR"
 git pull origin main 2>/dev/null || true
 
 # Always regenerate hostfile with correct format for MPICH
+# Intel Xeon E5-2680 v3: 12 cores, 24 threads per node
 cat > "$HOSTFILE" << 'EOF'
-MPI-node1:4
-MPI-node2:4
-MPI-node3:4
-MPI-node4:4
-MPI-node6:4
-MPI-node7:4
-MPI-node8:4
-MPI-node9:4
-MPI-node10:4
-MPI-node11:4
+MPI-node1:24
+MPI-node2:24
+MPI-node3:24
+MPI-node4:24
+MPI-node6:24
+MPI-node7:24
+MPI-node8:24
+MPI-node9:24
+MPI-node10:24
+MPI-node11:24
 EOF
 
 NODES=$(grep -oE 'MPI-node[0-9]+' "$HOSTFILE" | sort -u)
@@ -120,19 +121,27 @@ compile_on_all_nodes "mpi-naive"
 if [ -f ./mpi_program ]; then
     {
         echo "=== MPI Naive ==="
+        echo "Small matrix tests with varying process counts:"
         echo "Size: 1000x1000 (with verification)"
-        for procs in 20 40; do
+        for procs in 4 8 16 24; do
             echo "Procs: $procs"
             mpirun $MPI_OPTS -np $procs ./mpi_program 1000 1
         done
         
         echo ""
-        for size in 5000 10000; do
-            echo "Size: ${size}x${size}"
-            for procs in 20 40; do
-                echo "Procs: $procs"
-                mpirun $MPI_OPTS -np $procs ./mpi_program $size 0
-            done
+        echo "Medium matrix:"
+        echo "Size: 5000x5000"
+        for procs in 24 48 96; do
+            echo "Procs: $procs"
+            mpirun $MPI_OPTS -np $procs ./mpi_program 5000 0
+        done
+        
+        echo ""
+        echo "Large matrix - maximum utilization:"
+        echo "Size: 10000x10000"
+        for procs in 96 144 192 240; do
+            echo "Procs: $procs"
+            mpirun $MPI_OPTS -np $procs ./mpi_program 10000 0
         done
     } 2>&1 | tee "$OUTPUT_DIR/mpi_naive_results.txt"
 fi
@@ -145,16 +154,10 @@ if [ -f ./mpi_program ]; then
     {
         echo "=== MPI Strassen ==="
         echo "Size: 1024x1024, Procs: 7 (verify)"
-        mpirun $MPI_OPTS -np 28 ./mpi_program 1024 1
+        mpirun $MPI_OPTS -np 7 ./mpi_program 1024 1
         
         echo "Size: 8192x8192, Procs: 7"
-        mpirun $MPI_OPTS -np 28 ./mpi_program 8192 0
-        
-        echo "Size: 8192x8192, Procs: 14"
-        mpirun $MPI_OPTS -np 35 ./mpi_program 8192 0
-        
-        echo "Size: 8192x8192, Procs: 21"
-        mpirun $MPI_OPTS -np 35 ./mpi_program 8192 0
+        mpirun $MPI_OPTS -np 7 ./mpi_program 8192 0
     } 2>&1 | tee "$OUTPUT_DIR/mpi_strassen_results.txt"
 fi
 
@@ -165,21 +168,17 @@ compile_on_all_nodes "hybrid-strassen"
 if [ -f ./main ]; then
     {
         echo "=== Hybrid MPI+OpenMP ==="
-        echo "Size: 2048x2048, Procs: 7, Threads: 1 (verify)"
-        export OMP_NUM_THREADS=1
-        mpirun $MPI_OPTS -np 28 -x OMP_NUM_THREADS=1 ./main 2048 1 1 128
+        echo "Size: 2048x2048, Procs: 7, Threads: 3 (verify)"
+        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 3 ./main 2048 1 3 128
         
-        echo "Size: 10240x10240, Procs: 7, Threads: 2"
-        export OMP_NUM_THREADS=2
-        mpirun $MPI_OPTS -np 28 -x OMP_NUM_THREADS=2 ./main 10240 0 2 128
+        echo "Size: 8192x8192, Procs: 7, Threads: 12"
+        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 12 ./main 8192 0 12 128
         
-        echo "Size: 10240x10240, Procs: 14, Threads: 2"
-        export OMP_NUM_THREADS=2
-        mpirun $MPI_OPTS -np 35 -x OMP_NUM_THREADS=2 ./main 10240 0 2 128
+        echo "Size: 8192x8192, Procs: 7, Threads: 24"
+        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 24 ./main 8192 0 24 128
         
-        echo "Size: 10240x10240, Procs: 21, Threads: 2"
-        export OMP_NUM_THREADS=2
-        mpirun $MPI_OPTS -np 35 -x OMP_NUM_THREADS=2 ./main 10240 0 2 128
+        echo "Size: 10240x10240, Procs: 7, Threads: 12"
+        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 12 ./main 10240 0 12 128
     } 2>&1 | tee "$OUTPUT_DIR/hybrid_strassen_results.txt"
 fi
 
