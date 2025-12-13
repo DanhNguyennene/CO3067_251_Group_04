@@ -1,0 +1,4 @@
+Hostname: danhRemoteStation
+Date: Sat Dec 13 13:09:02 +07 2025
+CPU: 11th Gen Intel(R) Core(TM) i7-11370H @ 3.30GHz
+Cores: 8
