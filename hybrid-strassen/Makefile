@@ -1,43 +1,36 @@
-# Makefile for OpenMP Divide & Conquer Matrix Multiplication
-# Parallel Computing Assignment 1
-
-# Compiler settings
 CXX = mpicxx
-CXXFLAGS = -std=c++11 -O3 -fopenmp -Wall -Wextra -march=native 
+CXXFLAGS = -std=c++11 -O3 -fopenmp -Wall -Wextra -march=native
 LDFLAGS = -fopenmp
-
-# Target executable
 TARGET = main
-
-# Source files
 SOURCES = $(wildcard *.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
-# Test parameters (as per assignment requirements)
-SIZES = 100 1000 10000
-THREADS = 1 2 4 8 16
-THRESHOLDS = 32 64 128 256
-N ?= 1000
-NP ?= 7
-
-# Default target
 all: $(TARGET)
-	@echo "============================================"
-	@echo "Build complete!"
-	@echo "Executable: $(TARGET)"
-	@echo "============================================"
 
-# Build executable
 $(TARGET): $(OBJECTS)
-	$(CXX) $(LDFLAGS) -o $(TARGET) $(OBJECTS)
+	$(CXX) $(LDFLAGS) -o $@ $^
 
-# Compile source files
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Clean build files
 clean:
-	rm -f $(OBJECTS) $(TARGET) *.txt *.csv
+	rm -f $(OBJECTS) $(TARGET) main *.txt *.csv
+
+test: $(TARGET)
+	mpirun -np 7 -x OMP_NUM_THREADS=7 ./$(TARGET) 100 1 7 128
+
+test-sizes: $(TARGET)
+	mpirun -np 7 -x OMP_NUM_THREADS=7 ./$(TARGET) 100 1 7 128
+	mpirun -np 7 -x OMP_NUM_THREADS=7 ./$(TARGET) 1000 1 7 128
+	mpirun -np 7 -x OMP_NUM_THREADS=7 ./$(TARGET) 4000 0 7 128
+
+test-threads: $(TARGET)
+	mpirun -np 7 -x OMP_NUM_THREADS=1 ./$(TARGET) 1000 0 1 128
+	mpirun -np 7 -x OMP_NUM_THREADS=2 ./$(TARGET) 1000 0 2 128
+	mpirun -np 7 -x OMP_NUM_THREADS=4 ./$(TARGET) 1000 0 4 128
+	mpirun -np 7 -x OMP_NUM_THREADS=7 ./$(TARGET) 1000 0 7 128
+
+.PHONY: all clean test test-sizes test-threads
 	@echo "Clean complete"
 
 # ==========================================

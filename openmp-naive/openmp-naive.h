@@ -40,6 +40,14 @@ void naiveAddMultiply(
     const float *B, int ldb,
     float *C, int ldc);
 
+void tiledMatMul(
+    int n,
+    const float *A,
+    const float *B,
+    float *C,
+    int num_threads,
+    int tile_size);
+
 void recursiveMatMul(
     int n,
     const float *A, int lda,

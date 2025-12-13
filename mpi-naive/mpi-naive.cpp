@@ -54,13 +54,86 @@ void localMatrixComputation(int N, int rows_per_proc, const std::vector<int> &lo
             int a_ik = local_a[i * N + k];
             for (int j = 0; j < N; j++)
             {
-                local_c[i * N + j] += a_ik * B[k * N + j]; // Matrix multiplication
+                local_c[i * N + j] += a_ik * B[k * N + j];
             }
         }
     }
 
     double local_end = MPI_Wtime();
     local_time = local_end - local_start;
+}
+
+void cannonMatrixMultiply(int N, int rank, int size, const std::vector<int>& A, const std::vector<int>& B, std::vector<int>& C, double& comp_time)
+{
+    int grid_size = (int)sqrt(size);
+    if (grid_size * grid_size != size) {
+        if (rank == 0) std::cout << "Cannon requires perfect square processes" << std::endl;
+        return;
+    }
+
+    int block_size = N / grid_size;
+    int row = rank / grid_size;
+    int col = rank % grid_size;
+
+    std::vector<int> local_A(block_size * block_size);
+    std::vector<int> local_B(block_size * block_size);
+    std::vector<int> local_C(block_size * block_size, 0);
+
+    for (int i = 0; i < block_size; i++) {
+        for (int j = 0; j < block_size; j++) {
+            int global_i = row * block_size + i;
+            int global_j = col * block_size + j;
+            if (rank == 0) {
+                local_A[i * block_size + j] = A[global_i * N + global_j];
+                local_B[i * block_size + j] = B[global_i * N + global_j];
+            }
+        }
+    }
+
+    MPI_Comm row_comm, col_comm;
+    MPI_Comm_split(MPI_COMM_WORLD, row, col, &row_comm);
+    MPI_Comm_split(MPI_COMM_WORLD, col, row, &col_comm);
+
+    int shift_source_A = (col - row + grid_size) % grid_size;
+    int shift_dest_A = (col + row) % grid_size;
+    MPI_Sendrecv_replace(local_A.data(), block_size * block_size, MPI_INT,
+                         shift_dest_A, 0, shift_source_A, 0, row_comm, MPI_STATUS_IGNORE);
+
+    int shift_source_B = (row - col + grid_size) % grid_size;
+    int shift_dest_B = (row + col) % grid_size;
+    MPI_Sendrecv_replace(local_B.data(), block_size * block_size, MPI_INT,
+                         shift_dest_B, 0, shift_source_B, 0, col_comm, MPI_STATUS_IGNORE);
+
+    double start = MPI_Wtime();
+    
+    for (int step = 0; step < grid_size; step++) {
+        for (int i = 0; i < block_size; i++) {
+            for (int k = 0; k < block_size; k++) {
+                int a_ik = local_A[i * block_size + k];
+                for (int j = 0; j < block_size; j++) {
+                    local_C[i * block_size + j] += a_ik * local_B[k * block_size + j];
+                }
+            }
+        }
+
+        int left = (col - 1 + grid_size) % grid_size;
+        int right = (col + 1) % grid_size;
+        MPI_Sendrecv_replace(local_A.data(), block_size * block_size, MPI_INT,
+                             left, 0, right, 0, row_comm, MPI_STATUS_IGNORE);
+
+        int up = (row - 1 + grid_size) % grid_size;
+        int down = (row + 1) % grid_size;
+        MPI_Sendrecv_replace(local_B.data(), block_size * block_size, MPI_INT,
+                             up, 0, down, 0, col_comm, MPI_STATUS_IGNORE);
+    }
+    
+    comp_time = MPI_Wtime() - start;
+
+    MPI_Gather(local_C.data(), block_size * block_size, MPI_INT,
+               (rank == 0 ? C.data() : nullptr), block_size * block_size, MPI_INT, 0, MPI_COMM_WORLD);
+
+    MPI_Comm_free(&row_comm);
+    MPI_Comm_free(&col_comm);
 }
 
 void gatherResults(int N, int rank, int rows_per_proc, const std::vector<int> &local_c, std::vector<int> &C)

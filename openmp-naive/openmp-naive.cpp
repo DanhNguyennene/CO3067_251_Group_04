@@ -49,6 +49,45 @@ void naiveAddMultiply(
     }
 }
 
+void tiledMatMul(
+    int n,
+    const float *A,
+    const float *B,
+    float *C,
+    int num_threads,
+    int tile_size)
+{
+    omp_set_num_threads(num_threads);
+    std::fill(C, C + n * n, 0.0f);
+
+#pragma omp parallel for collapse(2) schedule(dynamic)
+    for (int ii = 0; ii < n; ii += tile_size)
+    {
+        for (int jj = 0; jj < n; jj += tile_size)
+        {
+            for (int kk = 0; kk < n; kk += tile_size)
+            {
+                int i_end = std::min(ii + tile_size, n);
+                int j_end = std::min(jj + tile_size, n);
+                int k_end = std::min(kk + tile_size, n);
+
+                for (int i = ii; i < i_end; ++i)
+                {
+                    for (int k = kk; k < k_end; ++k)
+                    {
+                        float a_ik = A[i * n + k];
+#pragma omp simd
+                        for (int j = jj; j < j_end; ++j)
+                        {
+                            C[i * n + j] += a_ik * B[k * n + j];
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 void recursiveMatMul(
     int n,
     const float *A, int lda,

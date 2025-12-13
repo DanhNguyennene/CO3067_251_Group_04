@@ -38,12 +38,14 @@ std::vector<float> createRandomMatrix(int size, int seed)
 void addMatrix(
     int n, const float *A, int lda, const float *B, int ldb, float *C, int ldc)
 {
-
     for (int i = 0; i < n; i++)
     {
+        const float *a_row = A + i * lda;
+        const float *b_row = B + i * ldb;
+        float *c_row = C + i * ldc;
         for (int j = 0; j < n; j++)
         {
-            C[i * ldc + j] = A[i * lda + j] + B[i * ldb + j];
+            c_row[j] = a_row[j] + b_row[j];
         }
     }
 }
@@ -53,9 +55,12 @@ void subtractMatrix(
 {
     for (int i = 0; i < n; i++)
     {
+        const float *a_row = A + i * lda;
+        const float *b_row = B + i * ldb;
+        float *c_row = C + i * ldc;
         for (int j = 0; j < n; j++)
         {
-            C[i * ldc + j] = A[i * lda + j] - B[i * ldb + j];
+            c_row[j] = a_row[j] - b_row[j];
         }
     }
 }
@@ -132,13 +137,25 @@ void strassenSerial(
 
     for (int i = 0; i < m; i++)
     {
+        float *c11 = C + i * ldc;
+        float *c12 = c11 + m;
+        float *c21 = C + (i + m) * ldc;
+        float *c22 = c21 + m;
+        
+        const float *m1_row = M1 + i * m;
+        const float *m2_row = M2 + i * m;
+        const float *m3_row = M3 + i * m;
+        const float *m4_row = M4 + i * m;
+        const float *m5_row = M5 + i * m;
+        const float *m6_row = M6 + i * m;
+        const float *m7_row = M7 + i * m;
+        
         for (int j = 0; j < m; j++)
         {
-            int k = i * m + j;
-            C[i * ldc + j] = M1[k] + M4[k] - M5[k] + M7[k]; // C11
-            C[i * ldc + (j + m)] = M3[k] + M5[k];           // C12
-            C[(i + m) * ldc + j] = M2[k] + M4[k];           // C21
-            C[(i + m) * ldc + (j + m)] = M1[k] - M2[k] + M3[k] + M6[k];
+            c11[j] = m1_row[j] + m4_row[j] - m5_row[j] + m7_row[j];
+            c12[j] = m3_row[j] + m5_row[j];
+            c21[j] = m2_row[j] + m4_row[j];
+            c22[j] = m1_row[j] - m2_row[j] + m3_row[j] + m6_row[j];
         }
     }
 }
