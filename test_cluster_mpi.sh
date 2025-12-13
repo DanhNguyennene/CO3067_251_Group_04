@@ -30,18 +30,16 @@ git pull origin main 2>/dev/null || true
 
 if [ ! -f "$HOSTFILE" ]; then
     cat > "$HOSTFILE" << 'EOF'
-MPI-node1 slots=4
-MPI-node2 slots=4
-MPI-node3 slots=4
-MPI-node4 slots=4
-MPI-node5 slots=4
-MPI-node6 slots=4
-MPI-node7 slots=4
-MPI-node8 slots=4
-MPI-node9 slots=4
-MPI-node10 slots=4
-MPI-node11 slots=4
-MPI-node12 slots=4
+MPI-node1:4
+MPI-node2:4
+MPI-node3:4
+MPI-node4:4
+MPI-node6:4
+MPI-node7:4
+MPI-node8:4
+MPI-node9:4
+MPI-node10:4
+MPI-node11:4
 EOF
 fi
 
@@ -71,7 +69,7 @@ if [ "$REACHABLE_COUNT" -eq 0 ]; then
     # No nodes reachable at all - shouldn't happen but fallback to localhost
     USE_HOSTFILE=false
     cat > "$HOSTFILE" << 'EOF'
-localhost slots=4
+localhost:4
 EOF
     MPI_OPTS="--hostfile $HOSTFILE"
     echo "Warning: No nodes reachable. Running on localhost only."
