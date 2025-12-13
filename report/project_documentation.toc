@@ -19,41 +19,41 @@
 \contentsline {subsection}{\numberline {6.1}Makefile Structure}{16}{subsection.6.1}%
 \contentsline {section}{\numberline {7}Experimental Results}{17}{section.7}%
 \contentsline {subsection}{\numberline {7.1}Test Environment}{17}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}OpenMP Naive Results}{17}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.2}OpenMP Naive Results}{18}{subsection.7.2}%
 \contentsline {subsection}{\numberline {7.3}OpenMP Strassen Results}{19}{subsection.7.3}%
-\contentsline {subsection}{\numberline {7.4}Performance Analysis}{21}{subsection.7.4}%
-\contentsline {subsection}{\numberline {7.5}OpenMP Strassen Results}{22}{subsection.7.5}%
+\contentsline {subsection}{\numberline {7.4}Performance Analysis}{22}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}OpenMP Strassen Results}{23}{subsection.7.5}%
 \contentsline {subsection}{\numberline {7.6}MPI Results Analysis - HPCC Cluster}{23}{subsection.7.6}%
-\contentsline {subsection}{\numberline {7.7}MPI Cluster Results}{23}{subsection.7.7}%
-\contentsline {subsection}{\numberline {7.8}GPU Shader Performance Results}{26}{subsection.7.8}%
+\contentsline {subsection}{\numberline {7.7}MPI Cluster Results}{24}{subsection.7.7}%
+\contentsline {subsection}{\numberline {7.8}GPU Shader Performance Results}{27}{subsection.7.8}%
 \contentsline {section}{\numberline {8}Optimization Techniques}{29}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Cache Optimization}{29}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}Vectorization}{29}{subsection.8.2}%
-\contentsline {subsection}{\numberline {8.3}Memory Management}{29}{subsection.8.3}%
-\contentsline {subsection}{\numberline {8.4}Compiler Optimizations}{29}{subsection.8.4}%
+\contentsline {subsection}{\numberline {8.1}Cache Optimization}{30}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Vectorization}{30}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Memory Management}{30}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Compiler Optimizations}{30}{subsection.8.4}%
 \contentsline {section}{\numberline {9}Correctness Verification}{30}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Verification Strategy}{30}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}Error Metrics}{30}{subsection.9.2}%
-\contentsline {subsection}{\numberline {9.3}Test Results Summary}{30}{subsection.9.3}%
-\contentsline {section}{\numberline {10}Other Utilities}{30}{section.10}%
-\contentsline {subsection}{\numberline {10.1}Error Handling}{31}{subsection.10.1}%
-\contentsline {subsection}{\numberline {10.2}Performance Monitoring}{31}{subsection.10.2}%
-\contentsline {section}{\numberline {11}Comprehensive Comparison: All Parallel Paradigms}{31}{section.11}%
-\contentsline {subsection}{\numberline {11.1}Algorithm Implementation Summary}{32}{subsection.11.1}%
-\contentsline {subsection}{\numberline {11.2}Performance Overview - All Implementations}{32}{subsection.11.2}%
-\contentsline {subsubsection}{\numberline {11.2.1}Small Matrices (100-128×100-128)}{32}{subsubsection.11.2.1}%
-\contentsline {subsubsection}{\numberline {11.2.2}Medium Matrices (1000-1024×1000-1024)}{33}{subsubsection.11.2.2}%
-\contentsline {subsubsection}{\numberline {11.2.3}Large Matrices (8192×8192)}{33}{subsubsection.11.2.3}%
-\contentsline {subsection}{\numberline {11.3}Scalability Analysis}{34}{subsection.11.3}%
-\contentsline {subsection}{\numberline {11.4}Key Insights and Recommendations}{34}{subsection.11.4}%
-\contentsline {subsection}{\numberline {11.5}Architecture Trade-offs}{35}{subsection.11.5}%
-\contentsline {subsection}{\numberline {11.6}Implementation Complexity Comparison}{35}{subsection.11.6}%
-\contentsline {section}{\numberline {12}References}{36}{section.12}%
-\contentsline {section}{\numberline {A}Appendix A: Complete Source Code Listings}{36}{appendix.A}%
-\contentsline {subsection}{\numberline {A.1}Directory Structure}{36}{subsection.A.1}%
-\contentsline {section}{\numberline {B}Appendix B: Build and Run Instructions}{36}{appendix.B}%
-\contentsline {subsection}{\numberline {B.1}Building MPI Naive}{36}{subsection.B.1}%
-\contentsline {subsection}{\numberline {B.2}Building OpenMP Naive}{37}{subsection.B.2}%
-\contentsline {subsection}{\numberline {B.3}Building Hybrid Strassen}{37}{subsection.B.3}%
-\contentsline {section}{\numberline {C}Appendix C: Performance Data Tables}{37}{appendix.C}%
-\contentsline {subsection}{\numberline {C.1}Complete OpenMP Results - Machine 3}{37}{subsection.C.1}%
+\contentsline {subsection}{\numberline {9.1}Verification Strategy}{31}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Error Metrics}{31}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Test Results Summary}{31}{subsection.9.3}%
+\contentsline {section}{\numberline {10}Other Utilities}{31}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Error Handling}{32}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Performance Monitoring}{32}{subsection.10.2}%
+\contentsline {section}{\numberline {11}Comprehensive Comparison: All Parallel Paradigms}{32}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Algorithm Implementation Summary}{33}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}Performance Overview - All Implementations}{33}{subsection.11.2}%
+\contentsline {subsubsection}{\numberline {11.2.1}Small Matrices (100-128×100-128)}{33}{subsubsection.11.2.1}%
+\contentsline {subsubsection}{\numberline {11.2.2}Medium Matrices (1000-1024×1000-1024)}{34}{subsubsection.11.2.2}%
+\contentsline {subsubsection}{\numberline {11.2.3}Large Matrices (8192×8192)}{34}{subsubsection.11.2.3}%
+\contentsline {subsection}{\numberline {11.3}Scalability Analysis}{35}{subsection.11.3}%
+\contentsline {subsection}{\numberline {11.4}Key Insights and Recommendations}{35}{subsection.11.4}%
+\contentsline {subsection}{\numberline {11.5}Architecture Trade-offs}{36}{subsection.11.5}%
+\contentsline {subsection}{\numberline {11.6}Implementation Complexity Comparison}{36}{subsection.11.6}%
+\contentsline {section}{\numberline {12}References}{37}{section.12}%
+\contentsline {section}{\numberline {A}Appendix A: Complete Source Code Listings}{37}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}Directory Structure}{37}{subsection.A.1}%
+\contentsline {section}{\numberline {B}Appendix B: Build and Run Instructions}{37}{appendix.B}%
+\contentsline {subsection}{\numberline {B.1}Building MPI Naive}{37}{subsection.B.1}%
+\contentsline {subsection}{\numberline {B.2}Building OpenMP Naive}{38}{subsection.B.2}%
+\contentsline {subsection}{\numberline {B.3}Building Hybrid Strassen}{38}{subsection.B.3}%
+\contentsline {section}{\numberline {C}Appendix C: Performance Data Tables}{38}{appendix.C}%
+\contentsline {subsection}{\numberline {C.1}Complete OpenMP Results - Machine 3}{38}{subsection.C.1}%

@@ -264,88 +264,134 @@ def plot_efficiency_heatmap():
     plt.close()
 
 def plot_mpi_architecture_diagram():
-    """MPI Naive architecture diagram"""
-    fig, ax = plt.subplots(figsize=(12, 8))
-    ax.set_xlim(0, 10)
-    ax.set_ylim(0, 10)
+    """MPI Naive architecture diagram - Pipelined Ring with Z-order blocking"""
+    fig, ax = plt.subplots(figsize=(14, 10))
+    fig.patch.set_facecolor('white')
+    ax.set_xlim(0, 14)
+    ax.set_ylim(0, 12)
     ax.axis('off')
     
     # Title
-    ax.text(5, 9.5, 'MPI Naive Matrix Multiplication Architecture', 
-           ha='center', fontsize=16, fontweight='bold')
+    ax.text(7, 11.2, 'MPI Naive: Pipelined Ring with Z-Order Blocking', 
+           ha='center', fontsize=18, fontweight='bold')
+    ax.text(7, 10.6, 'Point-to-Point Communication + Morton Curve Cache Optimization', 
+           ha='center', fontsize=12, style='italic', color='#555')
     
-    # Matrix A distribution
-    ax.text(1, 8.5, 'Matrix A\n(Scattered)', ha='center', fontsize=11, fontweight='bold')
-    colors = ['#5DADE2', '#F8B739', '#EC7063', '#82E0AA']
-    for i in range(4):
-        rect = FancyBboxPatch((0.3, 7.5-i*0.6), 1.4, 0.5, 
-                             boxstyle="round,pad=0.05", 
-                             facecolor=colors[i], edgecolor='black', linewidth=2, alpha=0.7)
-        ax.add_patch(rect)
-        ax.text(1, 7.75-i*0.6, f'Process {i} rows', 
-               ha='center', va='center', fontsize=9, color='white', fontweight='bold')
-    
-    # Matrix B broadcast
-    ax.text(5, 8.5, 'Matrix B\n(Broadcast)', ha='center', fontsize=11, fontweight='bold')
-    rect = FancyBboxPatch((3.8, 7.0), 2.4, 1.2, 
-                         boxstyle="round,pad=0.05",
-                         facecolor='#AF7AC5', edgecolor='black', linewidth=2, alpha=0.7)
+    # Rank 0 (root process)
+    rect = FancyBboxPatch((0.5, 8.5), 2.5, 1.2, 
+                         boxstyle="round,pad=0.1",
+                         facecolor='#5DADE2', edgecolor='black', linewidth=3, alpha=0.85)
     ax.add_patch(rect)
-    ax.text(5, 7.6, 'Full Matrix B\n(All Processes)', 
-           ha='center', va='center', fontsize=10, color='white', fontweight='bold')
+    ax.text(1.75, 9.5, 'Rank 0', ha='center', va='center', 
+           fontsize=14, color='white', fontweight='bold')
+    ax.text(1.75, 9.0, 'Full Matrix A & B', ha='center', va='center', 
+           fontsize=9, color='white', fontweight='bold')
+    ax.text(1.75, 8.7, 'Initialize & Coordinate', ha='center', va='center', 
+           fontsize=8, color='white', style='italic')
     
-    # Processes
-    ax.text(8.5, 8.5, 'MPI Processes', ha='center', fontsize=11, fontweight='bold')
-    for i in range(4):
-        circle = plt.Circle((8.5, 7.5-i*0.6), 0.3, 
-                          facecolor=colors[i], edgecolor='black', linewidth=2, alpha=0.8)
-        ax.add_patch(circle)
-        ax.text(8.5, 7.5-i*0.6, f'P{i}', ha='center', va='center', 
-               fontsize=11, color='white', fontweight='bold')
+    # Phase 1: Sequential Send (Pipelined Ring)
+    ax.text(7, 9.0, 'Phase 1: Sequential Row Distribution', 
+           ha='center', fontsize=13, fontweight='bold', color='#E74C3C')
+    ax.text(7, 8.6, 'MPI_Send (Point-to-Point)', 
+           ha='center', fontsize=10, style='italic', color='#555')
     
-    # Computation phase
-    ax.text(5, 5.5, 'Local Computation Phase', ha='center', 
-           fontsize=12, fontweight='bold', style='italic')
-    ax.text(5, 5.0, 'Each process computes: C[local_rows] = A[local_rows] × B', 
-           ha='center', fontsize=10)
-    ax.text(5, 4.6, 'Loop ordering: i-k-j for cache optimization', 
-           ha='center', fontsize=9, style='italic', color='#555')
+    colors = ['#F8B739', '#EC7063', '#82E0AA', '#AF7AC5']
+    proc_positions = [4.5, 7, 9.5, 12]
     
-    # Result gathering
-    ax.text(5, 3.8, 'Matrix C\n(Gathered)', ha='center', fontsize=11, fontweight='bold')
-    for i in range(4):
-        rect = FancyBboxPatch((3.8, 2.8-i*0.4), 2.4, 0.35, 
-                             boxstyle="round,pad=0.03",
-                             facecolor=colors[i], edgecolor='black', linewidth=2, alpha=0.7)
+    for i, (color, pos) in enumerate(zip(colors, proc_positions)):
+        # Draw process boxes
+        rect = FancyBboxPatch((pos-0.9, 7.5), 1.8, 1.0, 
+                             boxstyle="round,pad=0.08",
+                             facecolor=color, edgecolor='black', linewidth=2.5, alpha=0.85)
         ax.add_patch(rect)
-        ax.text(5, 2.975-i*0.4, f'Process {i} results', 
-               ha='center', va='center', fontsize=8, color='white', fontweight='bold')
+        ax.text(pos, 8.3, f'Rank {i+1}', ha='center', va='center', 
+               fontsize=11, color='white', fontweight='bold')
+        ax.text(pos, 7.9, f'Rows [{i*250}:{(i+1)*250})', ha='center', va='center', 
+               fontsize=8, color='white')
+        
+        # Draw pipelined arrows from Rank 0
+        arrow = FancyArrowPatch((3.0, 9.1-i*0.15), (pos-1.0, 8.0), 
+                              arrowstyle='->', mutation_scale=25, linewidth=2.5,
+                              color=color, alpha=0.8, linestyle='solid')
+        ax.add_patch(arrow)
+        ax.text((3.0+pos-1.0)/2, (9.1-i*0.15+8.0)/2 + 0.2, 
+               f'A[{i*250}:{(i+1)*250}]', ha='center', fontsize=7, 
+               bbox=dict(boxstyle='round,pad=0.3', facecolor='white', alpha=0.8, edgecolor=color, linewidth=1.5))
     
-    # Communication arrows
-    arrow = FancyArrowPatch((1.8, 7.5), (3.7, 7.5), 
-                          arrowstyle='->', mutation_scale=30, linewidth=3,
-                          color='#333', alpha=0.6)
-    ax.add_patch(arrow)
+    # Phase 2: Broadcast Matrix B
+    ax.text(7, 6.8, 'Phase 2: Collective Broadcast', 
+           ha='center', fontsize=13, fontweight='bold', color='#3498DB')
+    ax.text(7, 6.4, 'MPI_Bcast (All Processes)', 
+           ha='center', fontsize=10, style='italic', color='#555')
     
-    arrow = FancyArrowPatch((6.3, 7.5), (8.0, 7.5), 
-                          arrowstyle='->', mutation_scale=30, linewidth=3,
-                          color='#333', alpha=0.6)
-    ax.add_patch(arrow)
+    # Matrix B representation
+    rect = FancyBboxPatch((5.5, 5.2), 3.0, 0.8, 
+                         boxstyle="round,pad=0.08",
+                         facecolor='#AF7AC5', edgecolor='black', linewidth=2.5, alpha=0.85)
+    ax.add_patch(rect)
+    ax.text(7, 5.75, 'Full Matrix B', ha='center', va='center', 
+           fontsize=11, color='white', fontweight='bold')
+    ax.text(7, 5.4, '(N×N elements to all ranks)', ha='center', va='center', 
+           fontsize=8, color='white')
     
-    arrow = FancyArrowPatch((8.5, 5.5), (6.5, 3.3), 
-                          arrowstyle='->', mutation_scale=30, linewidth=3,
-                          color='#333', alpha=0.6)
-    ax.add_patch(arrow)
+    # Broadcast arrows to all processes
+    for pos in [1.75] + proc_positions:
+        arrow = FancyArrowPatch((7, 5.2), (pos, 4.5 if pos == 1.75 else 4.8), 
+                              arrowstyle='->', mutation_scale=20, linewidth=2,
+                              color='#AF7AC5', alpha=0.6)
+        ax.add_patch(arrow)
     
-    # Legend
-    ax.text(5, 1.2, 'Communication Pattern: Scatter → Broadcast → Compute → Gather', 
-           ha='center', fontsize=10, bbox=dict(boxstyle='round', facecolor='#F9E79F', alpha=0.5))
-    ax.text(5, 0.5, 'Time Complexity: O(n³/p) computation + O(n²) communication', 
-           ha='center', fontsize=9, style='italic')
+    # Phase 3: Z-Order Computation
+    ax.text(7, 4.2, 'Phase 3: Local Computation with Z-Order Blocking', 
+           ha='center', fontsize=13, fontweight='bold', color='#16A085')
+    
+    # Z-order curve visualization
+    rect = FancyBboxPatch((2.5, 2.5), 4.0, 1.4, 
+                         boxstyle="round,pad=0.1",
+                         facecolor='#ECF0F1', edgecolor='#34495E', linewidth=2, alpha=0.9)
+    ax.add_patch(rect)
+    ax.text(4.5, 3.7, 'Z-Order (Morton) Curve', ha='center', fontsize=11, fontweight='bold', color='#34495E')
+    ax.text(4.5, 3.35, 'interleaveBits(x, y) → cache-friendly traversal', 
+           ha='center', fontsize=9, style='italic', color='#555')
+    ax.text(4.5, 2.95, 'C[local] = A[local] × B   (block_size=32)', 
+           ha='center', fontsize=9, fontweight='bold', color='#16A085')
+    ax.text(4.5, 2.65, 'for i in local_rows: for j,k in Z-order: C[i,j] += A[i,k]*B[k,j]', 
+           ha='center', fontsize=7, family='monospace', color='#555')
+    
+    # Cache benefit annotation
+    rect = FancyBboxPatch((7.0, 2.5), 4.5, 1.4, 
+                         boxstyle="round,pad=0.1",
+                         facecolor='#FFF9E6', edgecolor='#F39C12', linewidth=2, alpha=0.9)
+    ax.add_patch(rect)
+    ax.text(9.25, 3.7, 'Cache Optimization', ha='center', fontsize=11, fontweight='bold', color='#D68910')
+    ax.text(9.25, 3.3, '✓ Spatially close elements', ha='left', fontsize=9, color='#555')
+    ax.text(9.25, 2.95, '✓ Improved locality', ha='left', fontsize=9, color='#555')
+    ax.text(9.25, 2.6, '✓ Reduced cache misses', ha='left', fontsize=9, color='#555')
+    
+    # Phase 4: Gather Results
+    ax.text(7, 1.8, 'Phase 4: Sequential Result Collection', 
+           ha='center', fontsize=13, fontweight='bold', color='#E67E22')
+    ax.text(7, 1.4, 'MPI_Send → Rank 0 (Point-to-Point)', 
+           ha='center', fontsize=10, style='italic', color='#555')
+    
+    # Result matrix
+    rect = FancyBboxPatch((5.5, 0.2), 3.0, 0.8, 
+                         boxstyle="round,pad=0.08",
+                         facecolor='#27AE60', edgecolor='black', linewidth=2.5, alpha=0.85)
+    ax.add_patch(rect)
+    ax.text(7, 0.75, 'Matrix C (Complete)', ha='center', va='center', 
+           fontsize=11, color='white', fontweight='bold')
+    ax.text(7, 0.45, 'Assembled on Rank 0', ha='center', va='center', 
+           fontsize=8, color='white')
+    
+    # Performance summary
+    ax.text(7, -0.3, 'Constraint: N mod p = 0  |  Complexity: O(n³/p) computation + O(n²) communication', 
+           ha='center', fontsize=9, 
+           bbox=dict(boxstyle='round,pad=0.4', facecolor='#E8F8F5', alpha=0.8, edgecolor='#17A589', linewidth=2))
     
     plt.tight_layout()
-    plt.savefig('mpi_naive_diagram.png', dpi=300, bbox_inches='tight')
-    print("✓ Generated: mpi_naive_diagram.png")
+    plt.savefig('mpi_naive_diagram.png', dpi=300, bbox_inches='tight', facecolor='white', edgecolor='none')
+    print("✓ Generated: mpi_naive_diagram.png (Pipelined Ring + Z-Order)")
     plt.close()
 
 def plot_strassen_diagram():
