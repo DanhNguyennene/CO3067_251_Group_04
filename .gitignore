@@ -5,6 +5,7 @@
 **/.spec-workflow
 __pycache__
 .vscode
+.log
 # Compiled Object files
 *.o
 *.obj
