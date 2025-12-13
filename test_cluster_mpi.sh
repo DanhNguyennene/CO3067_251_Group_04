@@ -132,19 +132,15 @@ if [ -f ./mpi_program ]; then
         done
         
         echo ""
-        echo "Medium matrix tests:"
-        echo "Size: 4800x4800 (divisible by 96,144)"
-        for procs in 96 144; do
-            echo "Procs: $procs"
-            mpirun $MPI_OPTS -np $procs ./mpi_program 4800 0
-        done
+        echo "Medium matrix tests (safe sizes):"
+        echo "Size: 3072x3072 (8 procs)"
+        mpirun $MPI_OPTS -np 8 ./mpi_program 3072 0
         
         echo ""
-        echo "Large matrix - maximum utilization:"
-        echo "Size: 9600x9600 (divisible by 192,240)"
-        for procs in 192 240; do
+        echo "Size: 5000x5000 (4 and 8 procs)"
+        for procs in 4 8; do
             echo "Procs: $procs"
-            mpirun $MPI_OPTS -np $procs ./mpi_program 9600 0
+            mpirun $MPI_OPTS -np $procs ./mpi_program 5000 0
         done
     } 2>&1 | tee "$OUTPUT_DIR/mpi_naive_results.txt"
 fi
@@ -174,9 +170,9 @@ if [ -f ./mpi_program ]; then
         mpirun $MPI_OPTS -np 7 ./mpi_program 4096 0
         
         echo ""
-        echo "Extra large matrix:"
-        echo "Size: 8192x8192, Procs: 7"
-        mpirun $MPI_OPTS -np 7 ./mpi_program 8192 0
+        echo "Extra large matrix (safe size):"
+        echo "Size: 5120x5120, Procs: 7"
+        mpirun $MPI_OPTS -np 7 ./mpi_program 5120 0
     } 2>&1 | tee "$OUTPUT_DIR/mpi_strassen_results.txt"
 fi
 
@@ -192,6 +188,10 @@ if [ -f ./main ]; then
         
         echo "Size: 2048x2048, MPI Procs: 7, OpenMP Threads: 3 - with verification"
         mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 3 ./main 2048 1 3 128
+        
+        echo ""
+        echo "Size: 3072x3072, MPI Procs: 7, OpenMP Threads: 8"
+        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 8 ./main 3072 0 8 128
         
         echo ""
         echo "Size: 4096x4096, MPI Procs: 7, OpenMP Threads: 12"
