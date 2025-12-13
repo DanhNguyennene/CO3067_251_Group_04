@@ -544,6 +544,45 @@ The implementation ensures thread safety through:
     \item Proper synchronization using \texttt{\#pragma omp taskwait}
 \end{itemize}
 
+
+\section{Shader Implementations}
+
+\subsection{Naive Shader}
+The \textit{naive} shader implements the straightforward element-wise matrix multiplication:
+\[
+C[i,j] = \sum_{k=0}^{N-1} A[i,k] \cdot B[k,j]
+\]
+Each thread computes a single element of the output matrix \(C\) with no use of shared memory. Thread indices correspond directly to matrix coordinates \((i,j)\).
+
+\begin{itemize}
+    \item Pros:
+    \begin{itemize}
+        \item Simple and easy to implement.
+        \item Can handle arbitrary matrix sizes.
+    \end{itemize}
+    \item Cons:
+    \begin{itemize}
+        \item Slow on large matrices due to extensive global memory accesses.
+        \item Cannot complete very large matrices (e.g., $8192\times8192$) because of GPU driver timeouts.
+    \end{itemize}
+\end{itemize}
+
+\subsection{Chunked Shader}
+The \textit{chunked} shader uses tiling and shared memory. The matrix is divided into $TILE \times TILE$ blocks (here $TILE=16$). Each workgroup loads a tile of $A$ and $B$ into shared memory and threads collaboratively compute partial sums for each tile. The final sums are written to the output matrix.
+
+\begin{itemize}
+    \item Pros:
+    \begin{itemize}
+        \item Significantly faster on large matrices due to reduced global memory access.
+        \item Efficient use of shared memory.
+    \end{itemize}
+    \item Cons:
+    \begin{itemize}
+        \item Tested only on matrices with sizes that are powers of 2.
+        \item Requires padding when $N$ is not a multiple of $TILE$.
+    \end{itemize}
+\end{itemize}
+
 \section{Build System}
 
 All implementations include comprehensive Makefiles for easy compilation and testing.
@@ -1013,6 +1052,38 @@ For 4000×4000 matrix:
     \item Efficiency drops from 77.6\% (2 proc) to 48.6\% (4 proc) to 21.8\% (8 proc)
     \item Communication-to-computation ratio increases with process count
     \item VPN network introduces additional latency affecting scalability
+\end{itemize}
+
+
+\subsection{Shader Performance Comparison}
+Table~\ref{tab:times} presents GPU execution times for both shaders on selected matrix sizes. Times are measured using GPU wall-clock queries (GL\_ARB\_timer\_query), machine used is our personal computers.
+
+\begin{table}[htbp]
+\centering
+\caption{GPU execution times for naive and chunked shaders}
+\label{tab:times}
+\begin{tabular}{cccc}
+\toprule
+Matrix size & Naive GPU time (ms) & Chunked GPU time (ms) & Notes \\
+\midrule
+$100\times100$   & 2.862 & 2.415 & Both shaders complete quickly \\
+$1000\times1000$ & 75.749 & 49.288  & Chunked is faster \\
+$8192\times8192$ & Timeout / crash & 13889.826 & Naive cannot complete \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Discussion}
+The chunked shader demonstrates a large performance improvement over the naive shader for large matrices, thanks to tiling and shared memory, which reduce global memory bandwidth requirements.
+
+The naive shader is simple and flexible but becomes impractical for large matrices and is limited by GPU execution time. The chunked shader is efficient but currently restricted to power-of-two matrix sizes; arbitrary sizes would require additional handling and padding.
+
+\subsection{Conclusion}
+\begin{itemize}
+    \item For small matrices, both naive and chunked shaders perform adequately.
+    \item For large matrices, the chunked shader is significantly faster and feasible on GPU.
+    \item The naive shader is limited by GPU execution time for very large matrices.
+    \item Future work could extend the chunked shader to arbitrary matrix sizes and further optimize tile size selection.
 \end{itemize}
 
 \section{Optimization Techniques}
