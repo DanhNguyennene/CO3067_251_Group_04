@@ -172,27 +172,24 @@ compile_on_all_nodes "hybrid-strassen"
 if [ -f ./main ]; then
     {
         echo "=== Hybrid MPI+OpenMP ==="
-        # Small with verification
+        # Small with verification - use 7 processes (Strassen requirement)
         echo "Size: 2048x2048 (with verification)"
-        for procs in 10 20; do
-            for threads in 2 4; do
-                echo "Procs: $procs, Threads: $threads (Total: $((procs*threads)) workers)"
-                export OMP_NUM_THREADS=$threads
-                mpirun $MPI_OPTS -np $procs -x OMP_NUM_THREADS=$threads ./main 2048 1 $threads 128
-            done
+        for threads in 2 4; do
+            echo "Procs: 7, Threads: $threads (Total: $((7*threads)) workers)"
+            export OMP_NUM_THREADS=$threads
+            mpirun $MPI_OPTS -np 7 -x OMP_NUM_THREADS=$threads ./main 2048 1 $threads 128
         done
         
         echo ""
         echo "=== Large matrices without verification ==="
-        # Large matrices with high process/thread counts
+        # Large matrices with 7 procs (Strassen) but varying threads to use all cores
         for size in 8192 10240; do
             echo "Size: ${size}x${size}"
-            for procs in 10 20; do
-                for threads in 2 4; do
-                    echo "Procs: $procs, Threads: $threads (Total: $((procs*threads)) workers)"
-                    export OMP_NUM_THREADS=$threads
-                    mpirun $MPI_OPTS -np $procs -x OMP_NUM_THREADS=$threads ./main $size 0 $threads 128
-                done
+            # 7 processes with 2, 4, 8 threads = 14, 28, 56 total workers
+            for threads in 2 4 8; do
+                echo "Procs: 7, Threads: $threads (Total: $((7*threads)) workers)"
+                export OMP_NUM_THREADS=$threads
+                mpirun $MPI_OPTS -np 7 -x OMP_NUM_THREADS=$threads ./main $size 0 $threads 128
             done
         done
     } 2>&1 | tee "$OUTPUT_DIR/hybrid_strassen_results.txt"
