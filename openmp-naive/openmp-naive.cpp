@@ -88,7 +88,123 @@ void tiledMatMul(
     }
 }
 
-void blockCyclicMatMul(
+inline unsigned int interleaveBits(unsigned int x, unsigned int y)
+{
+    x = (x | (x << 8)) & 0x00FF00FF;
+    x = (x | (x << 4)) & 0x0F0F0F0F;
+    x = (x | (x << 2)) & 0x33333333;
+    x = (x | (x << 1)) & 0x55555555;
+    
+    y = (y | (y << 8)) & 0x00FF00FF;
+    y = (y | (y << 4)) & 0x0F0F0F0F;
+    y = (y | (y << 2)) & 0x33333333;
+    y = (y | (y << 1)) & 0x55555555;
+    
+    return x | (y << 1);
+}
+
+inline void deinterleaveBits(unsigned int z, unsigned int& x, unsigned int& y)
+{
+    x = z & 0x55555555;
+    y = (z >> 1) & 0x55555555;
+    
+    x = (x | (x >> 1)) & 0x33333333;
+    x = (x | (x >> 2)) & 0x0F0F0F0F;
+    x = (x | (x >> 4)) & 0x00FF00FF;
+    x = (x | (x >> 8)) & 0x0000FFFF;
+    
+    y = (y | (y >> 1)) & 0x33333333;
+    y = (y | (y >> 2)) & 0x0F0F0F0F;
+    y = (y | (y >> 4)) & 0x00FF00FF;
+    y = (y | (y >> 8)) & 0x0000FFFF;
+}
+
+static void zOrderBlockHelper(
+    int n,
+    const float *A, int lda,
+    const float *B, int ldb,
+    float *C, int ldc,
+    int block_size)
+{
+    if (n <= block_size) {
+        for (int i = 0; i < n; ++i) {
+            const float *a_row = A + i * lda;
+            float *c_row = C + i * ldc;
+            
+            for (int k = 0; k < n; ++k) {
+                float a_ik = a_row[k];
+                const float *b_row = B + k * ldb;
+                
+#pragma omp simd
+                for (int j = 0; j < n; ++j) {
+                    c_row[j] += a_ik * b_row[j];
+                }
+            }
+        }
+        return;
+    }
+    
+    int m = n / 2;
+    
+    const float *A11 = A;
+    const float *A12 = A + m;
+    const float *A21 = A + m * lda;
+    const float *A22 = A + m * lda + m;
+    
+    const float *B11 = B;
+    const float *B12 = B + m;
+    const float *B21 = B + m * ldb;
+    const float *B22 = B + m * ldb + m;
+    
+    float *C11 = C;
+    float *C12 = C + m;
+    float *C21 = C + m * ldc;
+    float *C22 = C + m * ldc + m;
+    
+    if (n > block_size * 2) {
+#pragma omp taskgroup
+        {
+#pragma omp task shared(C11) firstprivate(m, lda, ldb, ldc, block_size, A11, A12, B11, B21)
+            {
+                zOrderBlockHelper(m, A11, lda, B11, ldb, C11, ldc, block_size);
+                zOrderBlockHelper(m, A12, lda, B21, ldb, C11, ldc, block_size);
+            }
+            
+#pragma omp task shared(C12) firstprivate(m, lda, ldb, ldc, block_size, A11, A12, B12, B22)
+            {
+                zOrderBlockHelper(m, A11, lda, B12, ldb, C12, ldc, block_size);
+                zOrderBlockHelper(m, A12, lda, B22, ldb, C12, ldc, block_size);
+            }
+            
+#pragma omp task shared(C21) firstprivate(m, lda, ldb, ldc, block_size, A21, A22, B11, B21)
+            {
+                zOrderBlockHelper(m, A21, lda, B11, ldb, C21, ldc, block_size);
+                zOrderBlockHelper(m, A22, lda, B21, ldb, C21, ldc, block_size);
+            }
+            
+#pragma omp task shared(C22) firstprivate(m, lda, ldb, ldc, block_size, A21, A22, B12, B22)
+            {
+                zOrderBlockHelper(m, A21, lda, B12, ldb, C22, ldc, block_size);
+                zOrderBlockHelper(m, A22, lda, B22, ldb, C22, ldc, block_size);
+            }
+        }
+    } else {
+        zOrderBlockHelper(m, A11, lda, B11, ldb, C11, ldc, block_size);
+        zOrderBlockHelper(m, A12, lda, B21, ldb, C11, ldc, block_size);
+        
+        zOrderBlockHelper(m, A11, lda, B12, ldb, C12, ldc, block_size);
+        zOrderBlockHelper(m, A12, lda, B22, ldb, C12, ldc, block_size);
+        
+        zOrderBlockHelper(m, A21, lda, B11, ldb, C21, ldc, block_size);
+        zOrderBlockHelper(m, A22, lda, B21, ldb, C21, ldc, block_size);
+        
+        zOrderBlockHelper(m, A21, lda, B12, ldb, C22, ldc, block_size);
+        zOrderBlockHelper(m, A22, lda, B22, ldb, C22, ldc, block_size);
+    }
+}
+
+
+void recursiveBlockedMatMul(
     int n,
     const float *A,
     const float *B,
@@ -99,41 +215,11 @@ void blockCyclicMatMul(
     omp_set_num_threads(num_threads);
     std::fill(C, C + n * n, 0.0f);
     
-    int num_blocks = (n + block_size - 1) / block_size;
-    
 #pragma omp parallel
     {
-        int tid = omp_get_thread_num();
-        
-        for (int bi = tid; bi < num_blocks; bi += num_threads)
+#pragma omp single
         {
-            int i_start = bi * block_size;
-            int i_end = std::min(i_start + block_size, n);
-            
-            for (int bk = 0; bk < num_blocks; bk++)
-            {
-                int k_start = bk * block_size;
-                int k_end = std::min(k_start + block_size, n);
-                
-                for (int bj = 0; bj < num_blocks; bj++)
-                {
-                    int j_start = bj * block_size;
-                    int j_end = std::min(j_start + block_size, n);
-                    
-                    for (int i = i_start; i < i_end; i++)
-                    {
-                        for (int k = k_start; k < k_end; k++)
-                        {
-                            float a_ik = A[i * n + k];
-#pragma omp simd
-                            for (int j = j_start; j < j_end; j++)
-                            {
-                                C[i * n + j] += a_ik * B[k * n + j];
-                            }
-                        }
-                    }
-                }
-            }
+            zOrderBlockHelper(n, A, n, B, n, C, n, block_size);
         }
     }
 }

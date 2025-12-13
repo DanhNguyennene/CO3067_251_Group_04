@@ -34,10 +34,10 @@ if [ $? -eq 0 ]; then
             done
         done
         echo ""
-        echo "=== Testing Block-Cyclic Method ==="
+        echo "=== Testing Recursive Blocked Method ==="
         for threads in 4 8; do
-            echo "Threads: $threads, Block: 64"
-            ./main 1000 0 $threads 64
+            echo "Threads: $threads, Block: 128"
+            ./main 1000 0 $threads 128
         done
     } 2>&1 | tee "../$OUTPUT_DIR/openmp_naive_results.txt"
 fi

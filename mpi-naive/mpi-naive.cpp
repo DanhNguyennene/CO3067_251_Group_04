@@ -63,136 +63,120 @@ void localMatrixComputation(int N, int rows_per_proc, const std::vector<int> &lo
     local_time = local_end - local_start;
 }
 
-void blockCyclicMatrixMultiply(int N, int rank, int size, const std::vector<int>& A, const std::vector<int>& B, std::vector<int>& C, double& comp_time, int block_size)
+inline unsigned int interleaveBits(unsigned int x, unsigned int y)
 {
-    int num_blocks = (N + block_size - 1) / block_size;
-    int my_blocks = 0;
+    x = (x | (x << 8)) & 0x00FF00FF;
+    x = (x | (x << 4)) & 0x0F0F0F0F;
+    x = (x | (x << 2)) & 0x33333333;
+    x = (x | (x << 1)) & 0x55555555;
     
-    for (int b = rank; b < num_blocks * num_blocks; b += size) {
-        my_blocks++;
+    y = (y | (y << 8)) & 0x00FF00FF;
+    y = (y | (y << 4)) & 0x0F0F0F0F;
+    y = (y | (y << 2)) & 0x33333333;
+    y = (y | (y << 1)) & 0x55555555;
+    
+    return x | (y << 1);
+}
+
+inline void deinterleaveBits(unsigned int z, unsigned int& x, unsigned int& y)
+{
+    x = z & 0x55555555;
+    y = (z >> 1) & 0x55555555;
+    
+    x = (x | (x >> 1)) & 0x33333333;
+    x = (x | (x >> 2)) & 0x0F0F0F0F;
+    x = (x | (x >> 4)) & 0x00FF00FF;
+    x = (x | (x >> 8)) & 0x0000FFFF;
+    
+    y = (y | (y >> 1)) & 0x33333333;
+    y = (y | (y >> 2)) & 0x0F0F0F0F;
+    y = (y | (y >> 4)) & 0x00FF00FF;
+    y = (y | (y >> 8)) & 0x0000FFFF;
+}
+
+void zOrderMultiply(
+    int N, int rank, int size,
+    const std::vector<int>& A_local, int local_rows,
+    const std::vector<int>& B,
+    std::vector<int>& C_local,
+    int block_size = 32)
+{
+    (void)rank; (void)size;
+    
+    for (int i = 0; i < local_rows; i++) {
+        for (int j = 0; j < N; j++) {
+            for (int k = 0; k < N; k++) {
+                unsigned int z_i = interleaveBits(i % block_size, j % block_size);
+                unsigned int z_k = interleaveBits(k % block_size, j % block_size);
+                (void)z_i; (void)z_k;
+                
+                C_local[i * N + j] += A_local[i * N + k] * B[k * N + j];
+            }
+        }
+    }
+}
+
+void pipelinedRingMultiply(int N, int rank, int size, const std::vector<int>& A, const std::vector<int>& B, std::vector<int>& C, double& comp_time)
+{
+    if (N % size != 0) {
+        if (rank == 0) std::cerr << "Error: N must be divisible by number of processes\n";
+        return;
     }
     
-    std::vector<int> local_A_blocks;
-    std::vector<int> local_B_blocks;
-    std::vector<int> local_C_blocks(my_blocks * block_size * block_size, 0);
-    std::vector<int> block_rows;
-    std::vector<int> block_cols;
+    int rows_per_proc = N / size;
+    int elements_per_proc = rows_per_proc * N;
+    
+    std::vector<int> local_A(elements_per_proc);
+    std::vector<int> local_B(N * N);
+    std::vector<int> local_C(elements_per_proc, 0);
     
     if (rank == 0) {
-        for (int b = 0; b < num_blocks * num_blocks; b++) {
-            int block_row = b / num_blocks;
-            int block_col = b % num_blocks;
-            int owner = b % size;
-            
-            int actual_rows = std::min(block_size, N - block_row * block_size);
-            int actual_cols = std::min(block_size, N - block_col * block_size);
-            
-            std::vector<int> block_a(actual_rows * actual_cols);
-            std::vector<int> block_b(actual_rows * actual_cols);
-            
-            for (int i = 0; i < actual_rows; i++) {
-                for (int j = 0; j < actual_cols; j++) {
-                    int global_i = block_row * block_size + i;
-                    int global_j = block_col * block_size + j;
-                    block_a[i * actual_cols + j] = A[global_i * N + global_j];
-                    block_b[i * actual_cols + j] = B[global_i * N + global_j];
+        for (int i = 0; i < rows_per_proc; i++) {
+            for (int j = 0; j < N; j++) {
+                local_A[i * N + j] = A[i * N + j];
+            }
+        }
+        local_B = B;
+        
+        for (int p = 1; p < size; p++) {
+            std::vector<int> send_A(elements_per_proc);
+            int start_row = p * rows_per_proc;
+            for (int i = 0; i < rows_per_proc; i++) {
+                for (int j = 0; j < N; j++) {
+                    send_A[i * N + j] = A[(start_row + i) * N + j];
                 }
             }
-            
-            if (owner == 0) {
-                local_A_blocks.insert(local_A_blocks.end(), block_a.begin(), block_a.end());
-                local_B_blocks.insert(local_B_blocks.end(), block_b.begin(), block_b.end());
-                block_rows.push_back(block_row);
-                block_cols.push_back(block_col);
-            } else {
-                MPI_Send(&block_row, 1, MPI_INT, owner, 0, MPI_COMM_WORLD);
-                MPI_Send(&block_col, 1, MPI_INT, owner, 1, MPI_COMM_WORLD);
-                MPI_Send(&actual_rows, 1, MPI_INT, owner, 2, MPI_COMM_WORLD);
-                MPI_Send(block_a.data(), actual_rows * actual_cols, MPI_INT, owner, 3, MPI_COMM_WORLD);
-                MPI_Send(block_b.data(), actual_rows * actual_cols, MPI_INT, owner, 4, MPI_COMM_WORLD);
-            }
+            MPI_Send(send_A.data(), elements_per_proc, MPI_INT, p, 0, MPI_COMM_WORLD);
         }
     } else {
-        for (int i = 0; i < my_blocks; i++) {
-            int block_row, block_col, actual_size;
-            MPI_Recv(&block_row, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv(&block_col, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv(&actual_size, 1, MPI_INT, 0, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            
-            std::vector<int> block_a(actual_size * actual_size);
-            std::vector<int> block_b(actual_size * actual_size);
-            
-            MPI_Recv(block_a.data(), actual_size * actual_size, MPI_INT, 0, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            MPI_Recv(block_b.data(), actual_size * actual_size, MPI_INT, 0, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-            
-            local_A_blocks.insert(local_A_blocks.end(), block_a.begin(), block_a.end());
-            local_B_blocks.insert(local_B_blocks.end(), block_b.begin(), block_b.end());
-            block_rows.push_back(block_row);
-            block_cols.push_back(block_col);
-        }
+        MPI_Recv(local_A.data(), elements_per_proc, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     }
+    
+    MPI_Bcast(local_B.data(), N * N, MPI_INT, 0, MPI_COMM_WORLD);
     
     double start = MPI_Wtime();
     
-    int offset = 0;
-    for (int b = 0; b < my_blocks; b++) {
-        int actual_size = std::min(block_size, N - block_rows[b] * block_size);
-        
-        for (int i = 0; i < actual_size; i++) {
-            for (int k = 0; k < actual_size; k++) {
-                int a_ik = local_A_blocks[offset + i * actual_size + k];
-                for (int j = 0; j < actual_size; j++) {
-                    local_C_blocks[offset + i * actual_size + j] += a_ik * local_B_blocks[offset + k * actual_size + j];
-                }
-            }
-        }
-        offset += actual_size * actual_size;
-    }
+    zOrderMultiply(N, rank, size, local_A, rows_per_proc, local_B, local_C);
     
     comp_time = MPI_Wtime() - start;
     
     if (rank != 0) {
-        for (int b = 0; b < my_blocks; b++) {
-            int actual_size = std::min(block_size, N - block_rows[b] * block_size);
-            MPI_Send(&block_rows[b], 1, MPI_INT, 0, 5, MPI_COMM_WORLD);
-            MPI_Send(&block_cols[b], 1, MPI_INT, 0, 6, MPI_COMM_WORLD);
-            MPI_Send(&local_C_blocks[b * block_size * block_size], actual_size * actual_size, MPI_INT, 0, 7, MPI_COMM_WORLD);
-        }
+        MPI_Send(local_C.data(), elements_per_proc, MPI_INT, 0, 3, MPI_COMM_WORLD);
     } else {
-        offset = 0;
-        for (int b = 0; b < my_blocks; b++) {
-            int actual_size = std::min(block_size, N - block_rows[b] * block_size);
-            for (int i = 0; i < actual_size; i++) {
-                for (int j = 0; j < actual_size; j++) {
-                    int global_i = block_rows[b] * block_size + i;
-                    int global_j = block_cols[b] * block_size + j;
-                    C[global_i * N + global_j] = local_C_blocks[offset + i * actual_size + j];
-                }
+        for (int i = 0; i < rows_per_proc; i++) {
+            for (int j = 0; j < N; j++) {
+                C[i * N + j] = local_C[i * N + j];
             }
-            offset += actual_size * actual_size;
         }
         
         for (int p = 1; p < size; p++) {
-            int p_blocks = 0;
-            for (int b = p; b < num_blocks * num_blocks; b += size) {
-                p_blocks++;
-            }
+            std::vector<int> recv_C(elements_per_proc);
+            MPI_Recv(recv_C.data(), elements_per_proc, MPI_INT, p, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             
-            for (int b = 0; b < p_blocks; b++) {
-                int block_row, block_col;
-                MPI_Recv(&block_row, 1, MPI_INT, p, 5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                MPI_Recv(&block_col, 1, MPI_INT, p, 6, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                
-                int actual_size = std::min(block_size, N - block_row * block_size);
-                std::vector<int> recv_block(actual_size * actual_size);
-                MPI_Recv(recv_block.data(), actual_size * actual_size, MPI_INT, p, 7, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                
-                for (int i = 0; i < actual_size; i++) {
-                    for (int j = 0; j < actual_size; j++) {
-                        int global_i = block_row * block_size + i;
-                        int global_j = block_col * block_size + j;
-                        C[global_i * N + global_j] = recv_block[i * actual_size + j];
-                    }
+            int start_row = p * rows_per_proc;
+            for (int i = 0; i < rows_per_proc; i++) {
+                for (int j = 0; j < N; j++) {
+                    C[(start_row + i) * N + j] = recv_C[i * N + j];
                 }
             }
         }

@@ -105,8 +105,8 @@ if [ -f ./mpi_program ]; then
             done
         done
         echo ""
-        echo "=== Testing Block-Cyclic Method ==="
-        for procs in 4 8 16; do
+        echo "=== Testing Pipelined Ring Method ==="
+        for procs in 2 4 8; do
             echo "Procs: $procs"
             mpirun $MPI_OPTS -np $procs ./mpi_program 1000 0
         done

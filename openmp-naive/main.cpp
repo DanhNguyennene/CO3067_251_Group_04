@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     Timer t;
     t.start();
 
-    blockCyclicMatMul(N, A.data(), B.data(), C.data(), num_threads, block_size);
+    recursiveBlockedMatMul(N, A.data(), B.data(), C.data(), num_threads, block_size);
 
     float time = t.elapse();
 

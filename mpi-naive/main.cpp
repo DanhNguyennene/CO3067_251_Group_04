@@ -12,10 +12,9 @@ int main(int argc, char **argv)
     {
         if (rank == 0)
         {
-            std::cerr << "Usage: " << argv[0] << " <N> [verify] [block_size]\n";
-            std::cerr << "  N: Matrix size\n";
+            std::cerr << "Usage: " << argv[0] << " <N> [verify]\n";
+            std::cerr << "  N: Matrix size (must be divisible by number of processes)\n";
             std::cerr << "  verify: 0=skip, 1=verify (default: 0)\n";
-            std::cerr << "  block_size: Block size for cyclic distribution (default: 64)\n";
         }
         MPI_Finalize();
         return 1;
@@ -23,7 +22,6 @@ int main(int argc, char **argv)
 
     int N = std::atoi(argv[1]);
     int verify = (argc > 2) ? std::atoi(argv[2]) : 0;
-    int block_size = (argc > 3) ? std::atoi(argv[3]) : 64;
 
     std::vector<int> A, B, C;
     
@@ -42,7 +40,7 @@ int main(int argc, char **argv)
     double comp_time;
     double start_time = MPI_Wtime();
     
-    blockCyclicMatrixMultiply(N, rank, num_procs, A, B, C, comp_time, block_size);
+    pipelinedRingMultiply(N, rank, num_procs, A, B, C, comp_time);
     
     double total_time = MPI_Wtime() - start_time;
 

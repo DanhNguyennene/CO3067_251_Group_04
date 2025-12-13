@@ -31,9 +31,9 @@ test-threads: $(TARGET)
 	./$(TARGET) 1000 0 8 128
 	./$(TARGET) 1000 0 16 128
 
-test-blockcyclic: $(TARGET)
+test-dnc: $(TARGET)
 	./$(TARGET) 1000 0 4 64
-	./$(TARGET) 1000 0 8 64
-	./$(TARGET) 2000 0 4 128
+	./$(TARGET) 2000 0 8 64
+	./$(TARGET) 4000 0 16 64
 
-.PHONY: all clean test test-sizes test-threads test-blockcyclic
+.PHONY: all clean test test-sizes test-threads test-dnc

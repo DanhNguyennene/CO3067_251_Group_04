@@ -29,9 +29,9 @@ test-procs: $(TARGET)
 	mpirun -np 4 ./$(TARGET) 1000 0
 	mpirun -np 8 ./$(TARGET) 1000 0
 
-test-blockcyclic: $(TARGET)
-	mpirun -np 4 ./$(TARGET) 1000 0
-	mpirun -np 8 ./$(TARGET) 1000 0
-	mpirun -np 16 ./$(TARGET) 1000 0
+test-dnc: $(TARGET)
+	mpirun -np 2 ./$(TARGET) 1000 0
+	mpirun -np 4 ./$(TARGET) 2000 0
+	mpirun -np 8 ./$(TARGET) 4000 0
 
-.PHONY: all clean test test-sizes test-procs test-blockcyclic
+.PHONY: all clean test test-sizes test-procs test-dnc

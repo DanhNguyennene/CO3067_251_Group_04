@@ -15,7 +15,7 @@ void distributeMatrices(int N, int rank, const std::vector<int>& A, std::vector<
 
 void localMatrixComputation(int N, int rows_per_proc, const std::vector<int>& local_a, const std::vector<int>& B, std::vector<int>& local_c, double& local_time);
 
-void blockCyclicMatrixMultiply(int N, int rank, int size, const std::vector<int>& A, const std::vector<int>& B, std::vector<int>& C, double& comp_time, int block_size);
+void pipelinedRingMultiply(int N, int rank, int size, const std::vector<int>& A, const std::vector<int>& B, std::vector<int>& C, double& comp_time);
 
 void gatherResults(int N, int rank, int rows_per_proc, const std::vector<int>& local_c, std::vector<int>& C);
 
