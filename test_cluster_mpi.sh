@@ -120,11 +120,19 @@ compile_on_all_nodes "mpi-naive"
 if [ -f ./mpi_program ]; then
     {
         echo "=== MPI Naive ==="
-        # Test with larger process counts only
-        for size in 2000 5000 10000; do
+        # Small matrix with verification to check correctness
+        echo "Size: 1000x1000 (with verification)"
+        for procs in 10 20 40; do
+            echo "Procs: $procs"
+            mpirun $MPI_OPTS -np $procs ./mpi_program 1000 1
+        done
+        
+        echo ""
+        echo "=== Large matrices without verification ==="
+        # Large matrices, no verification for speed
+        for size in 5000 10000; do
             echo "Size: ${size}x${size}"
-            # Use 10, 20, 30, 40 processes (10 nodes × 4 cores)
-            for procs in 10 20 30 40; do
+            for procs in 10 20 40; do
                 if [ $((size % procs)) -eq 0 ]; then
                     echo "Procs: $procs"
                     mpirun $MPI_OPTS -np $procs ./mpi_program $size 0
@@ -141,8 +149,15 @@ compile_on_all_nodes "mpi-strassen"
 if [ -f ./mpi_program ]; then
     {
         echo "=== MPI Strassen ==="
+        # Small with verification
+        echo "Size: 1024x1024 (with verification)"
+        echo "Procs: 7"
+        mpirun $MPI_OPTS -np 7 ./mpi_program 1024 1
+        
+        echo ""
+        echo "=== Large matrices without verification ==="
         # Strassen requires 7 processes
-        for size in 1024 4096 8192; do
+        for size in 4096 8192; do
             echo "Size: ${size}x${size}"
             echo "Procs: 7"
             mpirun $MPI_OPTS -np 7 ./mpi_program $size 0
@@ -157,10 +172,21 @@ compile_on_all_nodes "hybrid-strassen"
 if [ -f ./main ]; then
     {
         echo "=== Hybrid MPI+OpenMP ==="
-        # Use 10-20 MPI processes with multiple threads
-        for size in 4096 10240; do
+        # Small with verification
+        echo "Size: 2048x2048 (with verification)"
+        for procs in 10 20; do
+            for threads in 2 4; do
+                echo "Procs: $procs, Threads: $threads (Total: $((procs*threads)) workers)"
+                export OMP_NUM_THREADS=$threads
+                mpirun $MPI_OPTS -np $procs -x OMP_NUM_THREADS=$threads ./main 2048 1 $threads 128
+            done
+        done
+        
+        echo ""
+        echo "=== Large matrices without verification ==="
+        # Large matrices with high process/thread counts
+        for size in 8192 10240; do
             echo "Size: ${size}x${size}"
-            # 10 processes × 4 threads = 40 workers
             for procs in 10 20; do
                 for threads in 2 4; do
                     echo "Procs: $procs, Threads: $threads (Total: $((procs*threads)) workers)"
