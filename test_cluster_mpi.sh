@@ -190,34 +190,12 @@ if [ -f ./main ]; then
         echo "Note: Hybrid uses 7 MPI processes with OpenMP threads per process"
         echo ""
         
-        echo "Small matrix (with verification):"
-        echo "Size: 2048x2048, MPI Procs: 7, OpenMP Threads: 3"
+        echo "Size: 2048x2048, MPI Procs: 7, OpenMP Threads: 3 - with verification"
         mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 3 ./main 2048 1 3 128
         
         echo ""
-        echo "Medium matrix with moderate threading:"
-        echo "Size: 4096x4096, MPI Procs: 7, OpenMP Threads: 8"
-        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 8 ./main 4096 0 8 128
-        
-        echo ""
-        echo "Large matrix with moderate threading:"
-        echo "Size: 8192x8192, MPI Procs: 7, OpenMP Threads: 12"
-        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 12 ./main 8192 0 12 128
-        
-        echo ""
-        echo "Large matrix with maximum threading:"
-        echo "Size: 8192x8192, MPI Procs: 7, OpenMP Threads: 24"
-        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 24 ./main 8192 0 24 128
-        
-        echo ""
-        echo "Extra large matrix with maximum threading:"
-        echo "Size: 12288x12288, MPI Procs: 7, OpenMP Threads: 24"
-        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 24 ./main 12288 0 24 128
-    } 2>&1 | tee "$OUTPUT_DIR/hybrid_strassen_results.txt"
-fi
-        
-        echo "Size: 10240x10240, Procs: 7, Threads: 12"
-        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 12 ./main 10240 0 12 128
+        echo "Size: 4096x4096, MPI Procs: 7, OpenMP Threads: 12"
+        mpirun $MPI_OPTS -np 7 -genv OMP_NUM_THREADS 12 ./main 4096 0 12 128
     } 2>&1 | tee "$OUTPUT_DIR/hybrid_strassen_results.txt"
 fi
 

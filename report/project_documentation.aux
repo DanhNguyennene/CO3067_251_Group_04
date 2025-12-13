@@ -9,111 +9,89 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.1}Project Objectives}{3}{subsection.1.1}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.2}Algorithms Implemented}{3}{subsection.1.2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {2}MPI Implementation}{3}{section.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces MPI Naive Matrix Multiplication Architecture}}{3}{figure.1}\protected@file@percent }
-\newlabel{fig:mpi_naive}{{1}{3}{MPI Naive Matrix Multiplication Architecture}{figure.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}MPI Naive Matrix Multiplication}{4}{subsection.2.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}MPI Strassen Matrix Multiplication}{6}{subsection.2.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces MPI Strassen Algorithm - 7 Process Architecture}}{6}{figure.2}\protected@file@percent }
-\newlabel{fig:mpi_strassen}{{2}{6}{MPI Strassen Algorithm - 7 Process Architecture}{figure.2}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}OpenMP Implementation}{8}{section.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces OpenMP Task-Based Parallelism Architecture}}{9}{figure.3}\protected@file@percent }
-\newlabel{fig:openmp_tasks}{{3}{9}{OpenMP Task-Based Parallelism Architecture}{figure.3}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}OpenMP Naive Implementation}{9}{subsection.3.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}OpenMP Strassen Implementation}{11}{subsection.3.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4}Hybrid MPI+OpenMP Implementation}{12}{section.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Hybrid MPI+OpenMP Architecture - Multi-Level Parallelism}}{12}{figure.4}\protected@file@percent }
-\newlabel{fig:hybrid_arch}{{4}{12}{Hybrid MPI+OpenMP Architecture - Multi-Level Parallelism}{figure.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Architecture Overview}{13}{subsection.4.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Thread Safety}{13}{subsection.4.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}GPU Shader Implementations}{13}{section.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Naive Shader}{14}{subsection.5.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Chunked (Tiled) Shader}{14}{subsection.5.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Strassen GPU Shader}{15}{subsection.5.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Build System}{16}{section.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Makefile Structure}{17}{subsection.6.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Experimental Results}{17}{section.7}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Test Environment}{17}{subsection.7.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}OpenMP Naive Results}{18}{subsection.7.2}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces OpenMP Naive Performance Comparison Across Three Machines}}{18}{figure.5}\protected@file@percent }
-\newlabel{fig:openmp_naive_perf}{{5}{18}{OpenMP Naive Performance Comparison Across Three Machines}{figure.5}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces OpenMP Naive Performance - Machine 1 (Complete Results)}}{18}{table.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces OpenMP Naive Performance - Machine 2 (Complete Results)}}{19}{table.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}OpenMP Strassen Results}{19}{subsection.7.3}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces OpenMP Strassen Performance Across Three Machines}}{19}{figure.6}\protected@file@percent }
-\newlabel{fig:strassen_perf}{{6}{19}{OpenMP Strassen Performance Across Three Machines}{figure.6}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces OpenMP Strassen Performance - Complete Results (1000×1000)}}{20}{table.3}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces OpenMP Strassen Performance - Complete Results (10000×10000)}}{20}{table.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Algorithm Comparison: Naive vs Strassen (Machine 1, 10000×10000)}}{21}{figure.7}\protected@file@percent }
-\newlabel{fig:algo_comparison}{{7}{21}{Algorithm Comparison: Naive vs Strassen (Machine 1, 10000×10000)}{figure.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Speedup Analysis for Different Matrix Sizes}}{21}{figure.8}\protected@file@percent }
-\newlabel{fig:speedup_analysis}{{8}{21}{Speedup Analysis for Different Matrix Sizes}{figure.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Performance Analysis}{22}{subsection.7.4}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Parallel Efficiency Heatmap Across Three Machines}}{22}{figure.9}\protected@file@percent }
-\newlabel{fig:efficiency}{{9}{22}{Parallel Efficiency Heatmap Across Three Machines}{figure.9}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces OpenMP Naive Performance - Machine 2}}{22}{table.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}OpenMP Strassen Results}{23}{subsection.7.5}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces OpenMP Strassen Performance - Machine 1}}{23}{table.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.6}MPI Results Analysis - HPCC Cluster}{23}{subsection.7.6}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.7}MPI Cluster Results}{24}{subsection.7.7}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces MPI Naive Performance (Placeholder)}}{24}{figure.10}\protected@file@percent }
-\newlabel{fig:mpi_naive_perf}{{10}{24}{MPI Naive Performance (Placeholder)}{figure.10}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces MPI Speedup Analysis (Placeholder)}}{25}{figure.11}\protected@file@percent }
-\newlabel{fig:mpi_speedup}{{11}{25}{MPI Speedup Analysis (Placeholder)}{figure.11}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Hybrid MPI+OpenMP Performance (Placeholder)}}{25}{figure.12}\protected@file@percent }
-\newlabel{fig:hybrid_perf}{{12}{25}{Hybrid MPI+OpenMP Performance (Placeholder)}{figure.12}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {13}{\ignorespaces MPI Algorithm Comparison (Placeholder)}}{26}{figure.13}\protected@file@percent }
-\newlabel{fig:mpi_algo_cmp}{{13}{26}{MPI Algorithm Comparison (Placeholder)}{figure.13}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {14}{\ignorespaces MPI Efficiency Heatmap (Placeholder)}}{26}{figure.14}\protected@file@percent }
-\newlabel{fig:mpi_efficiency}{{14}{26}{MPI Efficiency Heatmap (Placeholder)}{figure.14}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {15}{\ignorespaces MPI Strong Scaling Analysis (Placeholder)}}{27}{figure.15}\protected@file@percent }
-\newlabel{fig:mpi_scaling}{{15}{27}{MPI Strong Scaling Analysis (Placeholder)}{figure.15}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {7.8}GPU Shader Performance Results}{27}{subsection.7.8}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces GPU Shader Execution Times and Performance Comparison}}{27}{table.7}\protected@file@percent }
-\newlabel{tab:gpu_times}{{7}{27}{GPU Shader Execution Times and Performance Comparison}{table.7}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces GPU vs CPU Correctness Verification}}{28}{table.8}\protected@file@percent }
-\newlabel{tab:gpu_verify}{{8}{28}{GPU vs CPU Correctness Verification}{table.8}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {16}{\ignorespaces GPU Shader Performance Comparison (Log Scale)}}{29}{figure.16}\protected@file@percent }
-\newlabel{fig:gpu_perf}{{16}{29}{GPU Shader Performance Comparison (Log Scale)}{figure.16}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces GPU vs CPU Performance Comparison (1024×1024 matrix)}}{29}{table.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Optimization Techniques}{29}{section.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Cache Optimization}{30}{subsection.8.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Vectorization}{30}{subsection.8.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Memory Management}{30}{subsection.8.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {8.4}Compiler Optimizations}{30}{subsection.8.4}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {9}Correctness Verification}{30}{section.9}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Verification Strategy}{31}{subsection.9.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Error Metrics}{31}{subsection.9.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}Test Results Summary}{31}{subsection.9.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {10}Other Utilities}{31}{section.10}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}Error Handling}{32}{subsection.10.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {10.2}Performance Monitoring}{32}{subsection.10.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {11}Performance Comparison}{32}{section.11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {11.1}Execution Time Summary}{33}{subsection.11.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Execution Times Across All Implementations (seconds)}}{33}{table.10}\protected@file@percent }
-\newlabel{tab:performance_summary}{{10}{33}{Execution Times Across All Implementations (seconds)}{table.10}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {11.2}Comparison with Eigen Library}{33}{subsection.11.2}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Performance vs Eigen Library}}{33}{table.11}\protected@file@percent }
-\newlabel{tab:eigen_comparison}{{11}{33}{Performance vs Eigen Library}{table.11}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {11.3}Key Findings}{33}{subsection.11.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {11.4}Implementation Trade-offs}{34}{subsection.11.4}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Implementation Complexity vs Performance}}{34}{table.12}\protected@file@percent }
-\newlabel{tab:tradeoffs}{{12}{34}{Implementation Complexity vs Performance}{table.12}{}}
-\newlabel{tab:efficiency}{{11.4}{34}{Implementation Trade-offs}{table.12}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {11.5}Key Insights and Recommendations}{35}{subsection.11.5}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {12}References}{35}{section.12}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {A}Appendix A: Complete Source Code Listings}{35}{appendix.A}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Directory Structure}{35}{subsection.A.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}MPI Naive Matrix Multiplication}{3}{subsection.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}MPI Strassen Matrix Multiplication}{5}{subsection.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3}OpenMP Implementation}{7}{section.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}OpenMP Naive Implementation}{8}{subsection.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}OpenMP Strassen Implementation}{9}{subsection.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}Hybrid MPI+OpenMP Implementation}{10}{section.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Architecture Overview}{10}{subsection.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Thread Safety}{11}{subsection.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}GPU Shader Implementations}{11}{section.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Naive Shader}{11}{subsection.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Chunked (Tiled) Shader}{12}{subsection.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Strassen GPU Shader}{13}{subsection.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Build System}{14}{section.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Makefile Structure}{14}{subsection.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Experimental Results}{14}{section.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.1}Test Environment}{15}{subsection.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.2}OpenMP Naive Results}{15}{subsection.7.2}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces OpenMP Naive Performance Comparison Across Three Machines}}{15}{figure.1}\protected@file@percent }
+\newlabel{fig:openmp_naive_perf}{{1}{15}{OpenMP Naive Performance Comparison Across Three Machines}{figure.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces OpenMP Naive Performance - Machine 1 (Complete Results)}}{16}{table.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces OpenMP Naive Performance - Machine 2 (Complete Results)}}{16}{table.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.3}OpenMP Strassen Results}{17}{subsection.7.3}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces OpenMP Strassen Performance Across Three Machines}}{17}{figure.2}\protected@file@percent }
+\newlabel{fig:strassen_perf}{{2}{17}{OpenMP Strassen Performance Across Three Machines}{figure.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces OpenMP Strassen Performance - Complete Results (1000×1000)}}{17}{table.3}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces OpenMP Strassen Performance - Complete Results (10000×10000)}}{18}{table.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.4}Performance Analysis}{18}{subsection.7.4}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Algorithm Comparison: Naive vs Strassen}}{18}{figure.3}\protected@file@percent }
+\newlabel{fig:algo_comparison}{{3}{18}{Algorithm Comparison: Naive vs Strassen}{figure.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces OpenMP Naive Performance - Machine 2}}{19}{table.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.5}OpenMP Strassen Results}{19}{subsection.7.5}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces OpenMP Strassen Performance - Machine 1}}{19}{table.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.6}MPI Results Analysis - HPCC Cluster}{20}{subsection.7.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.7}MPI Cluster Results}{20}{subsection.7.7}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces MPI Performance Comparison}}{21}{figure.4}\protected@file@percent }
+\newlabel{fig:mpi_comparison}{{4}{21}{MPI Performance Comparison}{figure.4}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {7.8}GPU Shader Performance Results}{21}{subsection.7.8}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {7}{\ignorespaces GPU Shader Execution Times and Performance Comparison}}{21}{table.7}\protected@file@percent }
+\newlabel{tab:gpu_times}{{7}{21}{GPU Shader Execution Times and Performance Comparison}{table.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {8}{\ignorespaces GPU vs CPU Correctness Verification}}{22}{table.8}\protected@file@percent }
+\newlabel{tab:gpu_verify}{{8}{22}{GPU vs CPU Correctness Verification}{table.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces GPU Shader Performance}}{23}{figure.5}\protected@file@percent }
+\newlabel{fig:gpu_perf}{{5}{23}{GPU Shader Performance}{figure.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {9}{\ignorespaces GPU vs CPU Performance Comparison (1024×1024 matrix)}}{23}{table.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Optimization Techniques}{23}{section.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.1}Cache Optimization}{24}{subsection.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.2}Vectorization}{24}{subsection.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.3}Memory Management}{24}{subsection.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {8.4}Compiler Optimizations}{24}{subsection.8.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {9}Correctness Verification}{24}{section.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.1}Verification Strategy}{25}{subsection.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.2}Error Metrics}{25}{subsection.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {9.3}Test Results Summary}{25}{subsection.9.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {10}Other Utilities}{25}{section.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.1}Error Handling}{26}{subsection.10.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {10.2}Performance Monitoring}{26}{subsection.10.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {11}Performance Comparison}{26}{section.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.1}Execution Time Summary}{27}{subsection.11.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {10}{\ignorespaces Execution Times Across All Implementations (seconds)}}{27}{table.10}\protected@file@percent }
+\newlabel{tab:performance_summary}{{10}{27}{Execution Times Across All Implementations (seconds)}{table.10}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.2}Comparison with Eigen Library}{27}{subsection.11.2}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {11}{\ignorespaces Performance vs Eigen Library}}{27}{table.11}\protected@file@percent }
+\newlabel{tab:eigen_comparison}{{11}{27}{Performance vs Eigen Library}{table.11}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.3}Key Findings}{27}{subsection.11.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.4}Implementation Trade-offs}{28}{subsection.11.4}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {12}{\ignorespaces Implementation Complexity vs Performance}}{28}{table.12}\protected@file@percent }
+\newlabel{tab:tradeoffs}{{12}{28}{Implementation Complexity vs Performance}{table.12}{}}
+\newlabel{tab:efficiency}{{11.4}{28}{Implementation Trade-offs}{table.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {11.5}Key Insights and Recommendations}{29}{subsection.11.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {12}References}{29}{section.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {A}Appendix A: Complete Source Code Listings}{29}{appendix.A}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {A.1}Directory Structure}{29}{subsection.A.1}\protected@file@percent }
 \gdef \LT@i {\LT@entry 
     {4}{79.88605pt}\LT@entry 
     {1}{59.95001pt}\LT@entry 
     {1}{62.87361pt}\LT@entry 
     {1}{79.80557pt}}
-\@writefile{toc}{\contentsline {section}{\numberline {B}Appendix B: Build and Run Instructions}{36}{appendix.B}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}Building MPI Naive}{36}{subsection.B.1}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Building OpenMP Naive}{36}{subsection.B.2}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Building Hybrid Strassen}{36}{subsection.B.3}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {C}Appendix C: Performance Data Tables}{36}{appendix.C}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Complete OpenMP Results - Machine 3}{36}{subsection.C.1}\protected@file@percent }
-\@writefile{lot}{\contentsline {table}{\numberline {13}{Complete OpenMP Naive Results - Machine 3}}{36}{table.13}\protected@file@percent }
-\newlabel{tab:complete_machine3}{{13}{36}{Complete OpenMP Naive Results - Machine 3}{table.13}{}}
-\gdef \@abspage@last{38}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Appendix B: Build and Run Instructions}{30}{appendix.B}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}Building MPI Naive}{30}{subsection.B.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.2}Building OpenMP Naive}{30}{subsection.B.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.3}Building Hybrid Strassen}{30}{subsection.B.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {C}Appendix C: Performance Data Tables}{30}{appendix.C}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {C.1}Complete OpenMP Results - Machine 3}{30}{subsection.C.1}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {13}{Complete OpenMP Naive Results - Machine 3}}{30}{table.13}\protected@file@percent }
+\newlabel{tab:complete_machine3}{{13}{30}{Complete OpenMP Naive Results - Machine 3}{table.13}{}}
+\gdef \@abspage@last{32}

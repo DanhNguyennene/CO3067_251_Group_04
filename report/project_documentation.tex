@@ -150,13 +150,6 @@ This document provides comprehensive documentation for parallel matrix multiplic
 
 \section{MPI Implementation}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.9\textwidth]{mpi_naive_diagram.png}
-\caption{MPI Naive Matrix Multiplication Architecture}
-\label{fig:mpi_naive}
-\end{figure}
-
 The Message Passing Interface (MPI) implementations leverage distributed memory parallelism, allowing matrix multiplication to scale across multiple nodes in a cluster. We implemented two variants: a straightforward naive algorithm using standard triple-nested loops, and Strassen's divide-and-conquer algorithm adapted for distributed execution.
 
 \subsection{MPI Naive Matrix Multiplication}
@@ -278,13 +271,6 @@ The computational complexity is $O(n^3/p)$ per process, while communication over
 
 \subsection{MPI Strassen Matrix Multiplication}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{mpi_strassen_diagram.png}
-\caption{MPI Strassen Algorithm - 7 Process Architecture}
-\label{fig:mpi_strassen}
-\end{figure}
-
 \textbf{Algorithm Overview:}
 
 Strassen's algorithm reduces matrix multiplication to 7 recursive multiplications instead of 8, achieving better asymptotic complexity.
@@ -394,13 +380,6 @@ void strassen_mpi_wrapper(int N, int rank, int numProcs,
 \section{OpenMP Implementation}
 
 The OpenMP implementations leverage shared-memory parallelism using thread-based task decomposition. OpenMP provides a simpler programming model compared to MPI, as all threads share the same address space. We implemented both naive and Strassen algorithms using OpenMP's task-based parallelism combined with recursive divide-and-conquer strategies for optimal load balancing.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{openmp_task_diagram.png}
-\caption{OpenMP Task-Based Parallelism Architecture}
-\label{fig:openmp_tasks}
-\end{figure}
 
 \subsection{OpenMP Naive Implementation}
 
@@ -548,13 +527,6 @@ void strassenParallel(int n, const float *A, int lda,
 \end{lstlisting}
 
 \section{Hybrid MPI+OpenMP Implementation}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{hybrid_architecture.png}
-\caption{Hybrid MPI+OpenMP Architecture - Multi-Level Parallelism}
-\label{fig:hybrid_arch}
-\end{figure}
 
 \subsection{Architecture Overview}
 
@@ -910,27 +882,13 @@ This section presents comprehensive benchmark results from testing all implement
 \end{tabular}
 \end{table}
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{algorithm_comparison.png}
-\caption{Algorithm Comparison: Naive vs Strassen (Machine 1, 10000×10000)}
-\label{fig:algo_comparison}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=\textwidth]{speedup_analysis.png}
-\caption{Speedup Analysis for Different Matrix Sizes}
-\label{fig:speedup_analysis}
-\end{figure}
-
 \subsection{Performance Analysis}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=\textwidth]{efficiency_heatmap.png}
-\caption{Parallel Efficiency Heatmap Across Three Machines}
-\label{fig:efficiency}
+\includegraphics[width=\textwidth]{algorithm_comparison.png}
+\caption{Algorithm Comparison: Naive vs Strassen}
+\label{fig:algo_comparison}
 \end{figure}
 
 \textbf{Scalability Observations:}
@@ -1037,44 +995,9 @@ The MPI tests on HPCC cluster encountered configuration issues (hostfile parsing
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\textwidth]{mpi_naive_performance.png}
-\caption{MPI Naive Performance (Placeholder)}
-\label{fig:mpi_naive_perf}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\textwidth]{mpi_speedup_analysis.png}
-\caption{MPI Speedup Analysis (Placeholder)}
-\label{fig:mpi_speedup}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth]{hybrid_mpi_openmp_performance.png}
-\caption{Hybrid MPI+OpenMP Performance (Placeholder)}
-\label{fig:hybrid_perf}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{mpi_algorithm_comparison.png}
-\caption{MPI Algorithm Comparison (Placeholder)}
-\label{fig:mpi_algo_cmp}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\textwidth]{mpi_efficiency_heatmap.png}
-\caption{MPI Efficiency Heatmap (Placeholder)}
-\label{fig:mpi_efficiency}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.85\textwidth]{mpi_strong_scaling.png}
-\caption{MPI Strong Scaling Analysis (Placeholder)}
-\label{fig:mpi_scaling}
+\includegraphics[width=0.95\textwidth]{mpi_algorithm_comparison.png}
+\caption{MPI Performance Comparison}
+\label{fig:mpi_comparison}
 \end{figure}
 
 
@@ -1168,7 +1091,7 @@ All errors are within acceptable floating-point precision bounds, confirming cor
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{gpu_shader_performance.png}
-\caption{GPU Shader Performance Comparison (Log Scale)}
+\caption{GPU Shader Performance}
 \label{fig:gpu_perf}
 \end{figure}
 

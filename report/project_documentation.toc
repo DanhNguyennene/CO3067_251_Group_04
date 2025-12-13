@@ -3,53 +3,53 @@
 \contentsline {subsection}{\numberline {1.1}Project Objectives}{3}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Algorithms Implemented}{3}{subsection.1.2}%
 \contentsline {section}{\numberline {2}MPI Implementation}{3}{section.2}%
-\contentsline {subsection}{\numberline {2.1}MPI Naive Matrix Multiplication}{4}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}MPI Strassen Matrix Multiplication}{6}{subsection.2.2}%
-\contentsline {section}{\numberline {3}OpenMP Implementation}{8}{section.3}%
-\contentsline {subsection}{\numberline {3.1}OpenMP Naive Implementation}{9}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}OpenMP Strassen Implementation}{11}{subsection.3.2}%
-\contentsline {section}{\numberline {4}Hybrid MPI+OpenMP Implementation}{12}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Architecture Overview}{13}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Thread Safety}{13}{subsection.4.2}%
-\contentsline {section}{\numberline {5}GPU Shader Implementations}{13}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Naive Shader}{14}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Chunked (Tiled) Shader}{14}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}Strassen GPU Shader}{15}{subsection.5.3}%
-\contentsline {section}{\numberline {6}Build System}{16}{section.6}%
-\contentsline {subsection}{\numberline {6.1}Makefile Structure}{17}{subsection.6.1}%
-\contentsline {section}{\numberline {7}Experimental Results}{17}{section.7}%
-\contentsline {subsection}{\numberline {7.1}Test Environment}{17}{subsection.7.1}%
-\contentsline {subsection}{\numberline {7.2}OpenMP Naive Results}{18}{subsection.7.2}%
-\contentsline {subsection}{\numberline {7.3}OpenMP Strassen Results}{19}{subsection.7.3}%
-\contentsline {subsection}{\numberline {7.4}Performance Analysis}{22}{subsection.7.4}%
-\contentsline {subsection}{\numberline {7.5}OpenMP Strassen Results}{23}{subsection.7.5}%
-\contentsline {subsection}{\numberline {7.6}MPI Results Analysis - HPCC Cluster}{23}{subsection.7.6}%
-\contentsline {subsection}{\numberline {7.7}MPI Cluster Results}{24}{subsection.7.7}%
-\contentsline {subsection}{\numberline {7.8}GPU Shader Performance Results}{27}{subsection.7.8}%
-\contentsline {section}{\numberline {8}Optimization Techniques}{29}{section.8}%
-\contentsline {subsection}{\numberline {8.1}Cache Optimization}{30}{subsection.8.1}%
-\contentsline {subsection}{\numberline {8.2}Vectorization}{30}{subsection.8.2}%
-\contentsline {subsection}{\numberline {8.3}Memory Management}{30}{subsection.8.3}%
-\contentsline {subsection}{\numberline {8.4}Compiler Optimizations}{30}{subsection.8.4}%
-\contentsline {section}{\numberline {9}Correctness Verification}{30}{section.9}%
-\contentsline {subsection}{\numberline {9.1}Verification Strategy}{31}{subsection.9.1}%
-\contentsline {subsection}{\numberline {9.2}Error Metrics}{31}{subsection.9.2}%
-\contentsline {subsection}{\numberline {9.3}Test Results Summary}{31}{subsection.9.3}%
-\contentsline {section}{\numberline {10}Other Utilities}{31}{section.10}%
-\contentsline {subsection}{\numberline {10.1}Error Handling}{32}{subsection.10.1}%
-\contentsline {subsection}{\numberline {10.2}Performance Monitoring}{32}{subsection.10.2}%
-\contentsline {section}{\numberline {11}Performance Comparison}{32}{section.11}%
-\contentsline {subsection}{\numberline {11.1}Execution Time Summary}{33}{subsection.11.1}%
-\contentsline {subsection}{\numberline {11.2}Comparison with Eigen Library}{33}{subsection.11.2}%
-\contentsline {subsection}{\numberline {11.3}Key Findings}{33}{subsection.11.3}%
-\contentsline {subsection}{\numberline {11.4}Implementation Trade-offs}{34}{subsection.11.4}%
-\contentsline {subsection}{\numberline {11.5}Key Insights and Recommendations}{35}{subsection.11.5}%
-\contentsline {section}{\numberline {12}References}{35}{section.12}%
-\contentsline {section}{\numberline {A}Appendix A: Complete Source Code Listings}{35}{appendix.A}%
-\contentsline {subsection}{\numberline {A.1}Directory Structure}{35}{subsection.A.1}%
-\contentsline {section}{\numberline {B}Appendix B: Build and Run Instructions}{36}{appendix.B}%
-\contentsline {subsection}{\numberline {B.1}Building MPI Naive}{36}{subsection.B.1}%
-\contentsline {subsection}{\numberline {B.2}Building OpenMP Naive}{36}{subsection.B.2}%
-\contentsline {subsection}{\numberline {B.3}Building Hybrid Strassen}{36}{subsection.B.3}%
-\contentsline {section}{\numberline {C}Appendix C: Performance Data Tables}{36}{appendix.C}%
-\contentsline {subsection}{\numberline {C.1}Complete OpenMP Results - Machine 3}{36}{subsection.C.1}%
+\contentsline {subsection}{\numberline {2.1}MPI Naive Matrix Multiplication}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}MPI Strassen Matrix Multiplication}{5}{subsection.2.2}%
+\contentsline {section}{\numberline {3}OpenMP Implementation}{7}{section.3}%
+\contentsline {subsection}{\numberline {3.1}OpenMP Naive Implementation}{8}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}OpenMP Strassen Implementation}{9}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Hybrid MPI+OpenMP Implementation}{10}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Architecture Overview}{10}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Thread Safety}{11}{subsection.4.2}%
+\contentsline {section}{\numberline {5}GPU Shader Implementations}{11}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Naive Shader}{11}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Chunked (Tiled) Shader}{12}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Strassen GPU Shader}{13}{subsection.5.3}%
+\contentsline {section}{\numberline {6}Build System}{14}{section.6}%
+\contentsline {subsection}{\numberline {6.1}Makefile Structure}{14}{subsection.6.1}%
+\contentsline {section}{\numberline {7}Experimental Results}{14}{section.7}%
+\contentsline {subsection}{\numberline {7.1}Test Environment}{15}{subsection.7.1}%
+\contentsline {subsection}{\numberline {7.2}OpenMP Naive Results}{15}{subsection.7.2}%
+\contentsline {subsection}{\numberline {7.3}OpenMP Strassen Results}{17}{subsection.7.3}%
+\contentsline {subsection}{\numberline {7.4}Performance Analysis}{18}{subsection.7.4}%
+\contentsline {subsection}{\numberline {7.5}OpenMP Strassen Results}{19}{subsection.7.5}%
+\contentsline {subsection}{\numberline {7.6}MPI Results Analysis - HPCC Cluster}{20}{subsection.7.6}%
+\contentsline {subsection}{\numberline {7.7}MPI Cluster Results}{20}{subsection.7.7}%
+\contentsline {subsection}{\numberline {7.8}GPU Shader Performance Results}{21}{subsection.7.8}%
+\contentsline {section}{\numberline {8}Optimization Techniques}{23}{section.8}%
+\contentsline {subsection}{\numberline {8.1}Cache Optimization}{24}{subsection.8.1}%
+\contentsline {subsection}{\numberline {8.2}Vectorization}{24}{subsection.8.2}%
+\contentsline {subsection}{\numberline {8.3}Memory Management}{24}{subsection.8.3}%
+\contentsline {subsection}{\numberline {8.4}Compiler Optimizations}{24}{subsection.8.4}%
+\contentsline {section}{\numberline {9}Correctness Verification}{24}{section.9}%
+\contentsline {subsection}{\numberline {9.1}Verification Strategy}{25}{subsection.9.1}%
+\contentsline {subsection}{\numberline {9.2}Error Metrics}{25}{subsection.9.2}%
+\contentsline {subsection}{\numberline {9.3}Test Results Summary}{25}{subsection.9.3}%
+\contentsline {section}{\numberline {10}Other Utilities}{25}{section.10}%
+\contentsline {subsection}{\numberline {10.1}Error Handling}{26}{subsection.10.1}%
+\contentsline {subsection}{\numberline {10.2}Performance Monitoring}{26}{subsection.10.2}%
+\contentsline {section}{\numberline {11}Performance Comparison}{26}{section.11}%
+\contentsline {subsection}{\numberline {11.1}Execution Time Summary}{27}{subsection.11.1}%
+\contentsline {subsection}{\numberline {11.2}Comparison with Eigen Library}{27}{subsection.11.2}%
+\contentsline {subsection}{\numberline {11.3}Key Findings}{27}{subsection.11.3}%
+\contentsline {subsection}{\numberline {11.4}Implementation Trade-offs}{28}{subsection.11.4}%
+\contentsline {subsection}{\numberline {11.5}Key Insights and Recommendations}{29}{subsection.11.5}%
+\contentsline {section}{\numberline {12}References}{29}{section.12}%
+\contentsline {section}{\numberline {A}Appendix A: Complete Source Code Listings}{29}{appendix.A}%
+\contentsline {subsection}{\numberline {A.1}Directory Structure}{29}{subsection.A.1}%
+\contentsline {section}{\numberline {B}Appendix B: Build and Run Instructions}{30}{appendix.B}%
+\contentsline {subsection}{\numberline {B.1}Building MPI Naive}{30}{subsection.B.1}%
+\contentsline {subsection}{\numberline {B.2}Building OpenMP Naive}{30}{subsection.B.2}%
+\contentsline {subsection}{\numberline {B.3}Building Hybrid Strassen}{30}{subsection.B.3}%
+\contentsline {section}{\numberline {C}Appendix C: Performance Data Tables}{30}{appendix.C}%
+\contentsline {subsection}{\numberline {C.1}Complete OpenMP Results - Machine 3}{30}{subsection.C.1}%
