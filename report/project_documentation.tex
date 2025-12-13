@@ -296,7 +296,7 @@ Notice how the Z-order pattern keeps nearby elements (e.g., 0,1,2,3) spatially c
     \item \textbf{Cache Locality}: Elements accessed together in matrix multiplication (like A[i][k] and B[k][j]) are more likely to be in the same cache line
     \item \textbf{TLB Efficiency}: Reduces Translation Lookaside Buffer misses by accessing memory pages more uniformly
     \item \textbf{Prefetcher Friendly}: CPU hardware prefetchers can better predict access patterns
-    \item \textbf{Typical Speedup}: 1.5-3× improvement for matrices larger than L3 cache size (>8MB)
+    \item \textbf{Typical Speedup}: 1.5-3× improvement for matrices larger than L3 cache size ($>$8MB)
 \end{itemize}
 
 This Z-order curve implementation is particularly effective for distributed computing where each MPI process works on a local block, as it minimizes the working set size and maximizes cache utilization during the triple-nested loop computation.
@@ -1644,55 +1644,6 @@ To evaluate our implementations against production-grade libraries, we benchmark
 
 \textbf{Key Insight}: Production math libraries (JAX, PyTorch, NumPy) leverage decades of expert optimization with highly tuned BLAS backends (MKL, OpenBLAS). Our implementations successfully demonstrate parallel programming concepts with reasonable performance (4.5× slower on high-end hardware for large matrices), providing valuable educational experience in OpenMP, MPI, and GPU computing.
 
-\subsection{Implementation Trade-offs}
-
-\begin{table}[H]
-\centering
-\caption{Implementation Complexity and Use Cases}
-\label{tab:tradeoffs}
-\begin{tabular}{@{}lccl@{}}
-\toprule
-\textbf{Implementation} & \textbf{Code Lines} & \textbf{Best Performance} & \textbf{Best Use Case} \\ \midrule
-OpenMP Naive & ~150 & 7.72s (10k×10k) & Single machine, learning \\
-OpenMP Strassen & ~200 & 6.09s (10k×10k) & CPU-bound workloads \\
-MPI Naive & ~250 & 0.262s (960×960) & Multi-node clusters \\
-MPI Strassen & ~350 & 0.103s (1k×1k) & Distributed systems \\
-Hybrid MPI+OpenMP & ~400 & 3.234s (4k×4k) & Large HPC systems \\
-GPU Shader & ~180 & 0.042s (1k×1k) & GPU available, max speed \\ \bottomrule
-\end{tabular}
-\end{table}
-
-\textbf{Recommendation:} 
-\begin{itemize}
-    \item \textbf{Single machine:} OpenMP Naive with proper thread count (8-16)
-    \item \textbf{Learning/Research:} OpenMP for simplicity, MPI for distributed computing
-    \item \textbf{Production HPC:} MPI for clusters, Hybrid for large-scale systems
-    \item \textbf{Maximum speed with GPU:} GPU Strassen for 1024-8192 sized matrices
-\end{itemize}
-
-\subsection{Key Insights and Recommendations}
-
-\begin{enumerate}
-    \item \textbf{Small Matrices ($N < 500$):}
-    \begin{itemize}
-        \item \textbf{Best Choice:} OpenMP Naive with 2-4 threads
-        \item \textbf{Reason:} Minimal overhead, excellent cache locality
-        \item \textbf{Avoid:} GPU (kernel launch overhead), MPI (communication overhead), Strassen (algorithm overhead)
-    \end{itemize}
-    
-    \item \textbf{Medium Matrices ($500 \leq N \leq 2048$):}
-    \begin{itemize}
-        \item \textbf{Best Choice:} GPU Strassen on systems with dedicated GPU
-        \item \textbf{Alternative:} OpenMP Naive with 4-8 threads on CPU-only systems
-        \item \textbf{Reason:} GPU parallelism overcomes kernel launch overhead, Strassen's $O(n^{2.807})$ advantage becomes significant
-    \end{itemize}
-    
-    \item \textbf{Large Matrices ($N > 2048$):}
-    \begin{itemize}
-        \item \textbf{Best Choice:} MPI for distributed systems, GPU Strassen for single-node GPU systems
-        \item \textbf{Reason:} Communication overhead amortized over large computation, full utilization of cluster resources
-    \end{itemize}
-\end{enumerate}
 
 \section{References}
 
@@ -1712,94 +1663,5 @@ GPU Shader & ~180 & 0.042s (1k×1k) & GPU available, max speed \\ \bottomrule
 
 \appendix
 
-\section{Appendix A: Complete Source Code Listings}
-
-Due to length constraints, complete source code is available in the project repository at:
-\texttt{/mnt/e/workspace/uni/sem9/parallel/Parallel\_Computing/}
-
-\subsection{Directory Structure}
-
-\begin{verbatim}
-Parallel_Computing/
-  mpi-naive/           # MPI naive implementation
-  mpi-strassen/        # MPI Strassen implementation
-  openmp-naive/        # OpenMP naive implementation
-  openmp-strassen/     # OpenMP Strassen implementation
-  hybrid-strassen/     # Hybrid MPI+OpenMP implementation
-  Eigen/               # Eigen library (for reference)
-  results_*/           # Benchmark results
-  README.md            # Project overview
-\end{verbatim}
-
-\section{Appendix B: Build and Run Instructions}
-
-\subsection{Building MPI Naive}
-
-\begin{lstlisting}[language=bash]
-cd mpi-naive
-make clean
-make
-
-# Run with 4 processes, 1000x1000 matrix
-mpiexec -n 4 ./mpi_program 1000 0
-\end{lstlisting}
-
-\subsection{Building OpenMP Naive}
-
-\begin{lstlisting}[language=bash]
-cd openmp-naive
-make clean
-make
-
-# Run with 8 threads, 1000x1000 matrix
-./main 1000 1 8 128
-\end{lstlisting}
-
-\subsection{Building Hybrid Strassen}
-
-\begin{lstlisting}[language=bash]
-cd hybrid-strassen
-make clean
-make
-
-# Run with 7 MPI processes, 4 OpenMP threads each
-export OMP_NUM_THREADS=4
-mpiexec -n 7 ./main 1000 0
-\end{lstlisting}
-
-\section{Appendix C: Performance Data Tables}
-
-\subsection{Complete OpenMP Results - Machine 3}
-
-\begin{longtable}{cccc}
-\caption{Complete OpenMP Naive Results - Machine 3} \label{tab:complete_machine3} \\
-\toprule
-\textbf{Size} & \textbf{Threads} & \textbf{Time (s)} & \textbf{Verification} \\
-\midrule
-\endfirsthead
-\multicolumn{4}{c}{{\tablename\ \thetable{} -- continued from previous page}} \\
-\toprule
-\textbf{Size} & \textbf{Threads} & \textbf{Time (s)} & \textbf{Verification} \\
-\midrule
-\endhead
-\midrule
-\endhead
-100×100 & 1 & 0.0001 & PASSED \\
-100×100 & 2 & 0.0003 & PASSED \\
-100×100 & 4 & 0.0009 & PASSED \\
-100×100 & 8 & 0.0004 & PASSED \\
-100×100 & 16 & 0.0017 & PASSED \\
-1000×1000 & 1 & 0.0761 & PASSED \\
-1000×1000 & 2 & 0.0576 & PASSED \\
-1000×1000 & 4 & 0.0338 & PASSED \\
-1000×1000 & 8 & 0.0273 & PASSED \\
-1000×1000 & 16 & 0.0237 & PASSED \\
-10000×10000 & 1 & 97.1157 & N/A \\
-10000×10000 & 2 & 70.1387 & N/A \\
-10000×10000 & 4 & 73.1689 & N/A \\
-10000×10000 & 8 & 82.2075 & N/A \\
-10000×10000 & 16 & 81.3105 & N/A \\
-\bottomrule
-\end{longtable}
 
 \end{document}

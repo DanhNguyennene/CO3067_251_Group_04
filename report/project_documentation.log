@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.16)  13 DEC 2025 16:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.16)  13 DEC 2025 17:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -547,7 +547,7 @@ Package hyperref Info: Link coloring OFF on input line 86.
 \@outlinefile=\write3
 \openout3 = `project_documentation.out'.
 
-<logo.png, id=225, 845.0772pt x 597.6729pt>
+<logo.png, id=184, 845.0772pt x 597.6729pt>
 File: logo.png Graphic file (type png)
 <use logo.png>
 Package pdftex.def Info: logo.png  used on input line 103.
@@ -580,7 +580,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.43 ...ecution Time Summary}{29}{subsection.11.1}
+l.43 ...ecution Time Summary}{28}{subsection.11.1}
                                                   % [1])
 \tf@toc=\write4
 \openout4 = `project_documentation.toc'.
@@ -1025,44 +1025,23 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[32
-pdfTeX warning (ext4): destination with the same identifier (name{table.17}) ha
-s been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.1702     \item O
-                  penMP Architecture Review Board. (2021). \textit{OpenMP Ap...
-]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[33]
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller to compensate:
-
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[34] (./project_documentation.aux)
+[32] (./project_documentation.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
 Package rerunfilecheck Info: File `project_documentation.out' has not changed.
-(rerunfilecheck)             Checksum: 7DEA0FA408A36750F08B3179F09B6FE8;9460.
+(rerunfilecheck)             Checksum: 9196B3FACAFB5010BFFBC1BB9E674CEA;7380.
  ) 
 Here is how much of TeX's memory you used:
- 15102 strings out of 476182
- 226023 string characters out of 5795594
+ 15026 strings out of 476182
+ 225001 string characters out of 5795594
  2336975 words of memory out of 5000000
- 36464 multiletter control sequences out of 15000+600000
+ 36427 multiletter control sequences out of 15000+600000
  566500 words of font info for 67 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  75i,12n,79p,535b,2159s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1083,10 +1062,10 @@ nts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /lcircle1.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbol
 s/msam10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols
 /msbm10.pfb>
-Output written on project_documentation.pdf (35 pages, 359625 bytes).
+Output written on project_documentation.pdf (33 pages, 350936 bytes).
 PDF statistics:
- 980 PDF objects out of 1000 (max. 8388607)
- 899 compressed objects within 9 object streams
- 451 named destinations out of 1000 (max. 500000)
- 446 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 886 PDF objects out of 1000 (max. 8388607)
+ 807 compressed objects within 9 object streams
+ 412 named destinations out of 1000 (max. 500000)
+ 366 words of extra memory for PDF output out of 10000 (max. 10000000)
 
