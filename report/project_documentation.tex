@@ -14,6 +14,7 @@
 \usepackage{booktabs}
 \usepackage{longtable}
 \usepackage{array}
+\usepackage{float}
 \usepackage{multirow}
 
 \geometry{margin=1in}
@@ -96,9 +97,6 @@
     
     \vspace{1cm}
     
-    % % University logo placeholder - you can add the actual logo here
-    % % \includegraphics[width=0.3\textwidth]{logo.png}
-    \vspace{1cm}
 
    \begin{center}
     \vspace{1cm}  % Top padding
@@ -153,7 +151,7 @@ This document provides comprehensive documentation for parallel matrix multiplic
 
 \section{MPI Implementation}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{mpi_naive_diagram.png}
 \caption{MPI Naive Matrix Multiplication Architecture}
@@ -253,7 +251,7 @@ Process $i$ receives rows $[i \times \text{rows\_per\_process}, (i+1) \times \te
 
 \subsection{MPI Strassen Matrix Multiplication}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{mpi_strassen_diagram.png}
 \caption{MPI Strassen Algorithm - 7 Process Architecture}
@@ -370,7 +368,7 @@ void strassen_mpi_wrapper(int N, int rank, int numProcs,
 
 The OpenMP implementations leverage shared-memory parallelism using thread-based task decomposition. OpenMP provides a simpler programming model compared to MPI, as all threads share the same address space. We implemented both naive and Strassen algorithms using OpenMP's task-based parallelism combined with recursive divide-and-conquer strategies for optimal load balancing.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{openmp_task_diagram.png}
 \caption{OpenMP Task-Based Parallelism Architecture}
@@ -507,7 +505,7 @@ void strassenParallel(int n, const float *A, int lda,
 
 \section{Hybrid MPI+OpenMP Implementation}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{hybrid_architecture.png}
 \caption{Hybrid MPI+OpenMP Architecture - Multi-Level Parallelism}
@@ -603,14 +601,14 @@ This section presents comprehensive benchmark results from testing all implement
 
 \subsection{OpenMP Naive Results}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{openmp_naive_performance.png}
 \caption{OpenMP Naive Performance Comparison Across Three Machines}
 \label{fig:openmp_naive_perf}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{OpenMP Naive Performance - Machine 1 (Complete Results)}
 \begin{tabular}{cccc}
@@ -638,7 +636,7 @@ This section presents comprehensive benchmark results from testing all implement
 \end{tabular}
 \end{table}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{OpenMP Naive Performance - Machine 2 (Complete Results)}
 \begin{tabular}{cccc}
@@ -668,14 +666,14 @@ This section presents comprehensive benchmark results from testing all implement
 
 \subsection{OpenMP Strassen Results}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{strassen_performance.png}
 \caption{OpenMP Strassen Performance Across Three Machines}
 \label{fig:strassen_perf}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{OpenMP Strassen Performance - Complete Results (1000×1000)}
 \begin{tabular}{lcccc}
@@ -703,7 +701,7 @@ This section presents comprehensive benchmark results from testing all implement
 \end{tabular}
 \end{table}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{OpenMP Strassen Performance - Complete Results (10000×10000)}
 \begin{tabular}{lcccc}
@@ -731,14 +729,14 @@ This section presents comprehensive benchmark results from testing all implement
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{algorithm_comparison.png}
 \caption{Algorithm Comparison: Naive vs Strassen (Machine 1, 10000×10000)}
 \label{fig:algo_comparison}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{speedup_analysis.png}
 \caption{Speedup Analysis for Different Matrix Sizes}
@@ -747,7 +745,7 @@ This section presents comprehensive benchmark results from testing all implement
 
 \subsection{Performance Analysis}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{efficiency_heatmap.png}
 \caption{Parallel Efficiency Heatmap Across Three Machines}
@@ -756,7 +754,7 @@ This section presents comprehensive benchmark results from testing all implement
 
 \textbf{Scalability Observations:}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{OpenMP Naive Performance - Machine 2}
 \begin{tabular}{cccc}
@@ -780,7 +778,7 @@ This section presents comprehensive benchmark results from testing all implement
 
 \subsection{OpenMP Strassen Results}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{OpenMP Strassen Performance - Machine 1}
 \begin{tabular}{cccc}
@@ -858,14 +856,14 @@ The MPI tests on HPCC cluster encountered configuration issues (hostfile parsing
 
 \textbf{MPI Naive Performance:}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{mpi_naive_performance.png}
 \caption{MPI Naive Performance across Different Matrix Sizes}
 \label{fig:mpi_naive_perf}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{MPI Naive Execution Times (seconds) - WireGuard Cluster}
 \begin{tabular}{@{}lcccc@{}}
@@ -888,14 +886,14 @@ Matrix Size & 1 Process & 2 Processes & 4 Processes & 8 Processes \\ \midrule
 
 \textbf{Speedup Analysis:}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.8\textwidth]{mpi_speedup_analysis.png}
 \caption{MPI Naive Speedup Analysis}
 \label{fig:mpi_speedup}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{MPI Naive Speedup and Efficiency - WireGuard Cluster}
 \begin{tabular}{@{}lccccc@{}}
@@ -917,7 +915,7 @@ Matrix Size & Processes & Time (s) & Speedup & Efficiency (\%) \\ \midrule
 
 MPI Strassen implementation uses exactly 7 processes as required by the algorithm:
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{MPI Strassen Results (7 Processes) - WireGuard Cluster}
 \begin{tabular}{@{}lcc@{}}
@@ -934,14 +932,14 @@ Matrix Size & Execution Time (s) & Relative L2 Error \\ \midrule
 
 \textbf{Hybrid MPI+OpenMP Performance:}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{hybrid_mpi_openmp_performance.png}
 \caption{Hybrid MPI+OpenMP Performance (7 MPI processes + varying OpenMP threads)}
 \label{fig:hybrid_perf}
 \end{figure}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Hybrid Strassen Execution Times (seconds) - 7 MPI Processes}
 \begin{tabular}{@{}lcccc@{}}
@@ -954,7 +952,7 @@ Matrix Size & 1 Thread & 2 Threads & 4 Threads & 8 Threads \\ \midrule
 \label{tab:hybrid_strassen}
 \end{table}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Hybrid Naive Execution Times (seconds) - 7 MPI Processes}
 \begin{tabular}{@{}lcccc@{}}
@@ -976,7 +974,7 @@ Matrix Size & 1 Thread & 2 Threads & 4 Threads & 8 Threads \\ \midrule
 
 \textbf{Algorithm Comparison:}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{mpi_algorithm_comparison.png}
 \caption{MPI Algorithm Comparison - 4000×4000 Matrix}
@@ -993,7 +991,7 @@ For 4000×4000 matrix:
 
 \textbf{Efficiency Heatmap:}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{mpi_efficiency_heatmap.png}
 \caption{Parallel Efficiency Heatmap for MPI Implementations}
@@ -1002,7 +1000,7 @@ For 4000×4000 matrix:
 
 \textbf{Strong Scaling Analysis:}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{mpi_strong_scaling.png}
 \caption{Strong Scaling Analysis - MPI Naive 4000×4000}
@@ -1170,7 +1168,7 @@ This section compares the OpenMP (shared memory) and MPI (distributed memory) im
 
 \subsubsection{4000×4000 Matrix - Best Performance Comparison}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Best Performance Achieved for 4000×4000 Matrix}
 \begin{tabular}{@{}lccc@{}}
@@ -1186,7 +1184,7 @@ Hybrid MPI+OpenMP & 7 proc + 2 threads & 6.21 & 2.84× \\
 
 \subsubsection{1000×1000 Matrix - Comparison}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Performance Comparison for 1000×1000 Matrix}
 \begin{tabular}{@{}lccc@{}}
@@ -1213,7 +1211,7 @@ Hybrid Naive & 7 proc + 2 threads & 0.0777 & 1.91× \\
 
 \subsection{Architecture Trade-offs}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{OpenMP vs MPI Trade-offs}
 \begin{tabular}{@{}lll@{}}
